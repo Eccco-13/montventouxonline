@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mont Ventoux Online — le Ventoux et le Vaucluse sur votre home trainer</title>
+  <meta name="description" content="Grimpez le Mont Ventoux par ses trois versants, traversez les Dentelles, Gordes et la Via Venaissia : 26 parcours réels du Vaucluse pour votre home trainer. Relief IGN, villages réels, météo du jour.">
+  <link rel="icon" type="image/png" href="img/icone.png">
+  <link rel="stylesheet" href="style.css?v=9">
+  <meta property="og:title" content="Mont Ventoux Online">
+  <meta property="og:description" content="Le Géant de Provence et tout le Vaucluse, sur votre home trainer.">
+  <meta property="og:image" content="img/hero.jpg">
+  <link rel="alternate" hreflang="fr" href="index.html">
+  <link rel="alternate" hreflang="en" href="en.html">
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/icone.png" alt="">Mont Ventoux Online</a>
+    <nav class="main" id="nav">
+      <a href="#ventoux">Le Géant</a>
+      <a href="#parcours">Parcours</a>
+      <a href="#videos">Vidéos</a>
+      <a href="#jeu">Le jeu</a>
+      <a href="#progression">Progression</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="right">
+      <a class="lang" href="en.html" hreflang="en" title="English version">EN</a>
+      <button class="menu" id="menu" aria-label="Menu" aria-controls="nav" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <img class="bg" src="img/hero.jpg?v=4" alt="Un cycliste au maillot MVO dans le pierrier du Mont Ventoux, l'observatoire au sommet">
+  <div class="wrap">
+    <img class="logo" src="img/logo.png" alt="Mont Ventoux Online">
+    <div class="soon-badge">Bientôt disponible • bêta en cours</div>
+    <h1>Le Ventoux vous attend. Dans votre salon.</h1>
+    <p>Les lacets de la forêt de Bédoin, le pierrier blanc au-dessus du Chalet Reynard, les gorges de la Nesque, Gordes perché sur son rocher, les villages des Dentelles : le Vaucluse reconstitué au mètre près, pour votre home trainer.</p>
+    <a class="btn" href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">Être prévenu de la sortie</a>
+    <a class="btn ghost" href="#parcours">Explorer la carte</a>
+  </div>
+</div>
+
+<div class="numbers">
+  <div class="wrap">
+    <div><strong id="n-parcours">26</strong><span>parcours réels</span></div>
+    <div><strong id="n-km">527</strong><span>km de routes du Vaucluse</span></div>
+    <div><strong>3</strong><span>versants du Mont Ventoux</span></div>
+    <div><strong>1 910 m</strong><span>au sommet du Géant</span></div>
+    <div><strong>50</strong><span>niveaux à gravir</span></div>
+  </div>
+</div>
+
+<section id="ventoux">
+  <div class="wrap">
+    <div class="kicker">Le Géant de Provence</div>
+    <h2>Trois versants. Trois façons de souffrir. Une seule légende.</h2>
+    <p class="lead">Chaque montée est chronométrée de son village jusqu'à l'observatoire, avec les bornes kilométriques blanches et jaunes qui égrènent l'altitude et la pente du kilomètre suivant, comme sur la vraie route.</p>
+    <div class="grid three">
+      <div class="card versant"><img src="img/bedoin.jpg?v=3" alt="La forêt de Bédoin"><div class="body">
+        <h3>Par Bédoin</h3><p>La voie royale : la forêt sans répit, puis le désert de pierres jusqu'au sommet.</p>
+        <div class="stats"><span>21,4 km</span><span class="hard">+1 582 m</span><span>7,4 %</span></div></div></div>
+      <div class="card versant"><img src="img/face_nord.jpg" alt="La face nord du Mont Ventoux au-dessus de la vallée du Toulourenc"><div class="body">
+        <h3>Par Malaucène</h3><p>La face nord, ses rampes irrégulières et le Mont Serein, le Géant en ligne de mire.</p>
+        <div class="stats"><span>22,5 km</span><span class="hard">+1 571 m</span><span>7,0 %</span></div></div></div>
+      <div class="card versant"><img src="img/sault.jpg?v=3" alt="La forêt puis le pierrier, au-dessus du Chalet Reynard"><div class="body">
+        <h3>Par Sault</h3><p>La plus douce, entre lavande et forêt, jusqu'au Chalet Reynard et aux six derniers kilomètres.</p>
+        <div class="stats"><span>24,4 km</span><span class="hard">+1 192 m</span><span>4,9 %</span></div></div></div>
+    </div>
+    <p class="note">Les trois le même jour ? Le badge « Triple Géant » est pour vous.</p>
+  </div>
+</section>
+
+<section id="parcours">
+  <div class="wrap">
+    <div class="kicker">La carte des parcours</div>
+    <h2>Tout le Vaucluse à portée de pédale.</h2>
+    <p class="lead">De la balade d'une heure sur la voie verte à la journée autour du Géant : des sorties réelles, enregistrées sur le terrain, et leurs portions de 25 à 40 km pour une séance de home trainer. Choisissez un parcours sur la carte ou dans la liste pour le découvrir.</p>
+    <div class="filters" id="filters">
+      <button data-f="all" class="on">Tous</button>
+      <button data-f="free">Gratuits</button>
+      <button data-f="ventoux">Mont Ventoux</button>
+      <button data-f="short">Moins de 40 km</button>
+      <button data-f="full">Sorties complètes</button>
+    </div>
+    <div class="atlas">
+      <div>
+        <div class="map" id="map">
+          <img src="img/carte_relief.jpg" alt="Carte en relief du Vaucluse, du Mont Ventoux à Gordes">
+          <svg id="routes" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="detail" id="detail" hidden></div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="wrap">
+    <div class="kicker">En vidéo</div>
+    <h2>Comme si vous y étiez.</h2>
+    <p class="lead">Images du jeu, telles qu'elles s'affichent sur votre écran.</p>
+    <div class="clip big">
+      <img src="video/bedoin.webp?v=1" loading="lazy" alt="Traversée de Bédoin, entre façades provençales, boutiques, terrasses et passants">
+      <span>La traversée de Bédoin</span>
+    </div>
+    <div class="grid three clips">
+      <div class="clip"><img src="video/foret.webp?v=4" loading="lazy" alt="Montée dans la forêt de Bédoin, à 10 %, avec le tableau de bord du jeu"><span>Bédoin, 10 % dans la forêt</span></div>
+      <div class="clip"><img src="video/ventoux.webp?v=4" loading="lazy" alt="Montée par Malaucène, les pentes blanches du Mont Ventoux en toile de fond"><span>Le Géant en toile de fond</span></div>
+      <div class="clip"><img src="video/via.webp?v=4" loading="lazy" alt="La Via Venaissia en VTT sous les platanes"><span>La Via Venaissia en VTT</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="jeu">
+  <div class="wrap">
+    <div class="kicker">Le jeu</div>
+    <h2>Chaque virage, chaque village, chaque pourcent.</h2>
+    <p class="lead">Mont Ventoux Online reconstruit la Provence à partir des données publiques les plus précises : relief de l'IGN, bâtiments et routes d'OpenStreetMap, photographies aériennes. Pas un décor inventé : la vraie route.</p>
+
+    <div class="feature">
+      <img src="img/bedoin_foret.jpg" alt="Montée du Ventoux dans la forêt de Bédoin">
+      <div>
+        <h3>La pente réelle, dans les jambes</h3>
+        <p>Votre home trainer reçoit la pente de la route à chaque instant : la forêt de Bédoin, les rampes au-dessus du Chalet Reynard, la dernière ligne droite vers l'observatoire.</p>
+        <p>La difficulté se règle à votre niveau : une rampe à 10 % peut se ressentir à 5 %.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/village.jpg" alt="Traversée de Sault, entre boutiques et façades provençales">
+      <div>
+        <h3>De vrais villages, de vraies rues</h3>
+        <p>Chaque maison est posée à sa place, à sa hauteur réelle, avec ses volets, ses tuiles et ses commerces. Les panneaux d'entrée de village et les noms de rues défilent sous vos roues.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/gordes_vue.jpg" alt="Gordes et la garrigue des monts de Vaucluse vus d'en haut">
+      <div>
+        <h3>Des paysages que vous reconnaîtrez</h3>
+        <p>Garrigue de chênes verts et de pins sur les versants, gorges de la Nesque en corniche, vignes des Dentelles, Gordes perché sur son rocher : le paysage est celui que vous connaissez, jusqu'au marquage blanc de la route.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/route_vivante.jpg" alt="Montée vers le Ventoux : un vététiste double, une voiture et des cyclistes devant">
+      <div>
+        <h3>Une route vivante</h3>
+        <p>D'autres cyclistes à suivre ou à doubler (avec l'aspiration dans leur roue), des voitures, des tracteurs, des troupeaux, les cigales l'été.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/meteo.jpg?v=3" alt="Sortie sous la pluie dans les vignes des Dentelles">
+      <div>
+        <h3>La météo du jour… ou celle de votre choix</h3>
+        <p><strong>En direct</strong> : le jeu récupère la vraie météo du Vaucluse au moment où vous roulez. Vent, rafales, température, nuages et pluie, avec un vent plus fort et plus froid au sommet du Ventoux qu'au pied.</p>
+        <p>Le vent compte vraiment : de face il vous freine, dans le dos il vous pousse, et les villages vous abritent. Envie d'autre chose ? Choisissez <strong>Grand beau</strong>, <strong>Mistral</strong>, <strong>Couvert</strong> ou <strong>Pluie</strong> avant de partir.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/ecran_plan.jpg?v=3" alt="Écran du plan d'entraînement « Préparer le Ventoux »">
+      <div>
+        <h3>S'entraîner pour de vrai</h3>
+        <p>Des séances de 30 minutes à 1 h 30 (sweet spot, seuil, VO2max…) roulées sur le parcours de votre choix, en mode ERG. Des plans complets, dont « Préparer le Ventoux » en 8 semaines, votre forme et votre fatigue au jour le jour.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/bedoin_village.jpg" alt="Bédoin, le Mont Ventoux à l'horizon">
+      <div>
+        <h3>Le sommet se mérite</h3>
+        <p>Le Ventoux grandit à chaque lacet. Ce qui vous attend là-haut, à 1 910 m ? Ce sera la surprise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="progression">
+  <div class="wrap">
+    <div class="kicker">Progression</div>
+    <h2>Roulez. Progressez. Collectionnez.</h2>
+    <p class="lead">Chaque coup de pédale compte : l'expérience se gagne à l'effort, la régularité est récompensée. De Cyclotouriste à Légende du Ventoux, cinquante niveaux à gravir.</p>
+    <div class="grid two prog">
+      <img class="shot" src="img/collection.jpg?v=3" alt="La collection : maillots, cadres et casques à débloquer">
+      <ul class="ticks">
+        <li><strong>Onze maillots</strong> à gagner : à pois au sommet du Ventoux, Lavande, Ocres de Roussillon, Dentelles, Nuit étoilée… jusqu'au maillot <strong>Légende du Ventoux</strong>.</li>
+        <li><strong>Cadres et casques</strong> arc-en-ciel, tricolores, coucher de soleil, et les logos MVO dorés.</li>
+        <li><strong>19 badges</strong> : les trois versants, l'Everest en dénivelé cumulé, le Tour du Vaucluse…</li>
+        <li><strong>Un défi chaque mois</strong> : 2 000 m de dénivelé, 8 séances, 300 km…</li>
+        <li><strong>Segments chronométrés</strong>, records et fantôme de votre meilleur passage.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <div class="kicker">Tarifs prévus</div>
+    <h2>Commencez gratuitement. Montez au sommet quand vous voulez.</h2>
+    <p class="soon-note">Le jeu est en cours de finalisation, avec un groupe de testeurs. Les tarifs ci-dessous sont ceux prévus à la sortie et peuvent encore évoluer. <a href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">Écrivez-nous</a> pour être prévenu de la sortie.</p>
+      <div class="offer">
+      <div class="card"><div class="body">
+        <h3>Gratuit</h3>
+        <div class="price">0 €</div>
+        <ul class="ticks">
+          <li><strong>4 parcours</strong>, quatre visages du Vaucluse : la Via Venaissia sous les platanes, le col de Suzette dans les Dentelles, la route de Vaison-la-Romaine, la montée vers Gordes</li>
+          <li>Votre home trainer et votre cardio en Bluetooth</li>
+          <li>Bilan de chaque sortie</li>
+          <li>Les 5 premiers niveaux, les badges et le défi du mois</li>
+        </ul>
+        <span class="btn ghost disabled" aria-disabled="true">Bientôt disponible</span>
+      </div></div>
+      <div class="card highlight"><div class="body">
+        <h3>Abonnement</h3>
+        <div class="price">5,99 € <small>/ mois</small></div>
+        <p class="sub">Sans engagement, résiliable à tout moment.</p>
+        <ul class="ticks">
+          <li><strong>Les 26 parcours</strong>, dont les trois versants du Mont Ventoux</li>
+          <li>Les nouveaux parcours, au fil des mois</li>
+          <li>Séances et plans d'entraînement, tests de FTP</li>
+          <li>Les 50 niveaux et tout ce qu'ils débloquent : maillots, cadres, casques</li>
+          <li>Segments, records, fantômes</li>
+        </ul>
+        <span class="btn disabled" aria-disabled="true">Bientôt disponible</span>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="materiel">
+  <div class="wrap">
+    <div class="kicker">Matériel</div>
+    <h2>Votre home trainer, votre cardio, votre PC.</h2>
+    <div class="grid two">
+      <ul class="ticks">
+        <li>Home trainer connecté en <strong>Bluetooth</strong> (norme FTMS, celle de la plupart des home trainers connectés récents) : pente envoyée en direct, mode ERG pendant les séances.</li>
+        <li>Ceinture ou montre <strong>cardio Bluetooth</strong>.</li>
+        <li><strong>Étalonnage guidé</strong> dans le jeu pour des sensations justes.</li>
+      </ul>
+      <ul class="ticks">
+        <li>PC sous <strong>Windows 10 ou 11</strong> (64 bits) avec le Bluetooth.</li>
+        <li>Fonctionne <strong>hors connexion</strong> une fois installé.</li>
+        <li>Export de vos sorties en <strong>GPX</strong>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="kicker">FAQ</div>
+    <h2>Questions fréquentes</h2>
+    <details open><summary>Quand le jeu sera-t-il disponible ?</summary><p>Mont Ventoux Online est en phase de test (bêta) avec un groupe de cyclistes. La sortie est prévue prochainement : <a href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">écrivez-nous</a> pour être prévenu dès qu'il sera téléchargeable.</p></details>
+    <details><summary>Que comprend la version gratuite ?</summary><p>Quatre parcours complets à rouler avec votre home trainer et votre cardio, sans limite de temps ni de nombre de sorties, les cinq premiers niveaux de progression, les badges et le défi du mois.</p></details>
+    <details><summary>Comment fonctionne l'abonnement ?</summary><p>5,99 € par mois, sans engagement : vous résiliez quand vous voulez, l'accès reste ouvert jusqu'à la fin du mois payé. Votre progression est conservée. En version gratuite, votre expérience continue de compter au-delà du niveau 5 : en vous abonnant, vous retrouvez aussitôt le niveau réellement gagné.</p></details>
+    <details><summary>Mon home trainer est-il compatible ?</summary><p>Le jeu se connecte aux home trainers Bluetooth qui suivent la norme FTMS, ce qui est le cas de la plupart des modèles connectés récents.</p></details>
+    <details><summary>Faut-il une connexion internet pour rouler ?</summary><p>Pas en permanence : les parcours sont installés sur votre PC et se roulent hors connexion. Le jeu vérifie votre abonnement en ligne au lancement ; cette vérification reste valable 7 jours, il suffit donc de se connecter au moins une fois par semaine. Internet sert aussi à la météo du jour.</p></details>
+    <details><summary>Les routes sont-elles vraiment réelles ?</summary><p>Oui : le relief vient de l'IGN, les routes, les bâtiments et les commerces d'OpenStreetMap, les couleurs du sol des photographies aériennes de l'IGN. Les parcours sont de vraies sorties enregistrées au GPS.</p></details>
+    <details><summary>Peut-on jouer sans home trainer ?</summary><p>Oui, au clavier, pour découvrir les parcours. Dans ce mode, aucune performance n'est enregistrée : c'est une sortie d'essai.</p></details>
+    <details><summary>Le jeu fonctionne-t-il sur Mac ?</summary><p>Pas pour l'instant : seulement sur PC Windows 10 ou 11.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Mont Ventoux Online<br>Données : © OpenStreetMap contributors (ODbL), relief et photographies aériennes © IGN (Licence ouverte).</div>
+    <div><a href="mailto:contact@montventouxonline.fr">Contact</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+  </div>
+</footer>
+
+<script src="data/parcours.js?v=4"></script>
+<script>
+// Carte des parcours : tracés sur le relief, liste filtrable, fiche du parcours survolé.
+(function () {
+  var data = window.PARCOURS || [];
+  var size = window.CARTE || { w: 1000, h: 750 };
+  var svg = document.getElementById("routes");
+  var list = document.getElementById("list");
+  var detail = document.getElementById("detail");
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 1000, H = Math.round(1000 * size.h / size.w);
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  var diffClass = { "Facile": "d1", "Modéré": "d2", "Difficile": "d3", "Très difficile": "d4" };
+  var fr = function (n, dec) { return n.toLocaleString("fr-FR", { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }); };
+  var full = data.filter(function (p) { return p.full; });
+  document.getElementById("n-parcours").textContent = data.length;
+  document.getElementById("n-km").textContent = fr(full.reduce(function (s, p) { return s + p.km; }, 0));
+
+  // Les sorties complètes d'abord (dessous), les portions par-dessus.
+  var order = data.slice().sort(function (a, b) { return (b.full ? 1 : 0) - (a.full ? 1 : 0) || b.km - a.km; });
+  var paths = {}, items = {};
+  order.forEach(function (p) {
+    var d = p.line.map(function (q, i) { return (i ? "L" : "M") + (q[0] * W).toFixed(1) + " " + (q[1] * H).toFixed(1); }).join(" ");
+    var halo = document.createElementNS(NS, "path");
+    halo.setAttribute("d", d); halo.setAttribute("class", "halo");
+    var path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", "route " + (p.free ? "free" : "paid") + (p.full ? "" : " portion"));
+    path.addEventListener("mouseenter", function () { focus(p.id); });
+    path.addEventListener("click", function () { focus(p.id, true); });
+    var hit = document.createElementNS(NS, "path");
+    hit.setAttribute("d", d); hit.setAttribute("class", "hit");
+    hit.addEventListener("mouseenter", function () { focus(p.id); });
+    hit.addEventListener("click", function () { focus(p.id, true); });
+    svg.appendChild(halo); svg.appendChild(path); svg.appendChild(hit);
+    paths[p.id] = [halo, path, hit];
+  });
+
+  data.slice().sort(function (a, b) { return (b.full ? 1 : 0) - (a.full ? 1 : 0) || a.km - b.km; }).forEach(function (p) {
+    var el = document.createElement("button");
+    el.className = "item";
+    el.innerHTML = '<span class="name">' + p.name + '</span>' +
+      '<span class="meta"><span class="tag ' + (p.free ? "free" : "paid") + '">' + (p.free ? "Gratuit" : "Abonnés") + '</span>' +
+      fr(p.km, 1) + ' km · ' + fr(p.dplus) + ' m D+ · <span class="' + diffClass[p.difficulty] + '">' + p.difficulty + '</span></span>';
+    el.addEventListener("mouseenter", function () { focus(p.id); });
+    el.addEventListener("click", function () {
+      focus(p.id, true);
+      // Téléphone : la fiche est au-dessus de la liste, on la ramène à l'écran.
+      if (window.matchMedia("(max-width: 900px)").matches) detail.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+    list.appendChild(el);
+    items[p.id] = el;
+  });
+
+  function profile(p) {
+    var lo = Math.min.apply(null, p.profile), hi = Math.max.apply(null, p.profile), span = Math.max(hi - lo, 50);
+    var pts = p.profile.map(function (z, i) { return (i * 300 / (p.profile.length - 1)).toFixed(1) + "," + (56 - (z - lo) / span * 50).toFixed(1); });
+    return '<svg class="profile" viewBox="0 0 300 60" preserveAspectRatio="none"><polygon points="0,60 ' + pts.join(" ") + ' 300,60"/></svg>';
+  }
+
+  var current = null;
+  function focus(id, scroll) {
+    var p = data.filter(function (x) { return x.id === id; })[0];
+    if (!p) return;
+    if (current && paths[current]) { paths[current][1].classList.remove("on"); items[current].classList.remove("on"); }
+    current = id;
+    svg.classList.add("focus");
+    paths[id][1].classList.add("on");
+    paths[id].forEach(function (el) { svg.appendChild(el); });      // au premier plan
+    items[id].classList.add("on");
+    if (scroll) items[id].scrollIntoView({ block: "nearest", behavior: "smooth" });
+    detail.hidden = false;
+    detail.innerHTML = '<div class="dh"><strong>' + p.name + '</strong><span class="tag ' + (p.free ? "free" : "paid") + '">' +
+      (p.free ? "Gratuit" : "Abonnés") + '</span></div><p>' + p.tagline + '</p>' +
+      '<div class="stats"><span>' + fr(p.km, 1) + ' km</span><span>' + fr(p.dplus) + ' m D+</span><span>' + fr(p.alt_max) +
+      ' m max.</span><span class="' + diffClass[p.difficulty] + '">' + p.difficulty + '</span></div>' + profile(p);
+  }
+
+  var filters = {
+    all: function () { return true; },
+    free: function (p) { return p.free; },
+    ventoux: function (p) { return p.ventoux; },
+    short: function (p) { return p.km <= 40; },
+    full: function (p) { return p.full; }
+  };
+  document.getElementById("filters").addEventListener("click", function (e) {
+    var f = e.target.getAttribute("data-f");
+    if (!f) return;
+    [].forEach.call(this.children, function (b) { b.classList.toggle("on", b === e.target); });
+    data.forEach(function (p) {
+      var show = filters[f](p);
+      items[p.id].hidden = !show;
+      paths[p.id].forEach(function (el) { el.style.display = show ? "" : "none"; });
+    });
+    var first = data.filter(filters[f]).sort(function (a, b) { return a.km - b.km; })[0];
+    if (first) focus(first.id, true);
+  });
+  var start = data.filter(function (p) { return p.id === "gpx_montee_bedoin"; })[0] || data[0];
+  if (start) focus(start.id);
+})();
+</script>
+<script>
+// Menu du téléphone.
+(function () {
+  var top = document.getElementById("top"), btn = document.getElementById("menu");
+  btn.addEventListener("click", function () {
+    var open = top.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open); btn.textContent = open ? "✕" : "☰";
+  });
+  document.getElementById("nav").addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { top.classList.remove("open"); btn.setAttribute("aria-expanded", false); btn.textContent = "☰"; }
+  });
+})();
+</script>
+</body>
+</html>

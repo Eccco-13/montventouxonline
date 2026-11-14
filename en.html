@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mont Ventoux Online — the Ventoux and Provence on your smart trainer</title>
+  <meta name="description" content="Climb Mont Ventoux by all three sides, ride through the Dentelles, Gordes and the Via Venaissia: 26 real routes of the Vaucluse, Provence, for your smart trainer. IGN terrain, real villages, today's weather.">
+  <link rel="icon" type="image/png" href="img/icone.png">
+  <link rel="stylesheet" href="style.css?v=9">
+  <meta property="og:title" content="Mont Ventoux Online">
+  <meta property="og:description" content="The Giant of Provence and the whole Vaucluse, on your smart trainer.">
+  <meta property="og:image" content="img/hero.jpg">
+  <link rel="alternate" hreflang="fr" href="index.html">
+  <link rel="alternate" hreflang="en" href="en.html">
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/icone.png" alt="">Mont Ventoux Online</a>
+    <nav class="main" id="nav">
+      <a href="#ventoux">The Giant</a>
+      <a href="#parcours">Routes</a>
+      <a href="#videos">Videos</a>
+      <a href="#jeu">The game</a>
+      <a href="#progression">Progression</a>
+      <a href="#tarifs">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="right">
+      <a class="lang" href="index.html" hreflang="fr" title="Version française">FR</a>
+      <button class="menu" id="menu" aria-label="Menu" aria-controls="nav" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <img class="bg" src="img/hero.jpg?v=4" alt="A rider in an MVO jersey on the white scree of Mont Ventoux, the observatory at the summit">
+  <div class="wrap">
+    <img class="logo" src="img/logo.png" alt="Mont Ventoux Online">
+    <div class="soon-badge">Coming soon • beta in progress</div>
+    <h1>The Ventoux is waiting for you. In your living room.</h1>
+    <p>The hairpins of the Bédoin forest, the white scree above Chalet Reynard, the Nesque gorges, Gordes perched on its rock, the villages of the Dentelles: the Vaucluse rebuilt to the metre, for your smart trainer.</p>
+    <a class="btn" href="mailto:contact@montventouxonline.fr?subject=Let%20me%20know%20when%20Mont%20Ventoux%20Online%20is%20out">Get notified at launch</a>
+    <a class="btn ghost" href="#parcours">Explore the map</a>
+  </div>
+</div>
+
+<div class="numbers">
+  <div class="wrap">
+    <div><strong id="n-parcours">26</strong><span>real routes</span></div>
+    <div><strong id="n-km">527</strong><span>km of Vaucluse roads</span></div>
+    <div><strong>3</strong><span>sides of Mont Ventoux</span></div>
+    <div><strong>1,910 m</strong><span>at the top of the Giant</span></div>
+    <div><strong>50</strong><span>levels to climb</span></div>
+  </div>
+</div>
+
+<section id="ventoux">
+  <div class="wrap">
+    <div class="kicker">The Giant of Provence</div>
+    <h2>Three sides. Three ways to suffer. One legend.</h2>
+    <p class="lead">Every climb is timed from its village up to the observatory, with the white and yellow kilometre markers counting down the altitude and the gradient of the next kilometre, just like on the real road.</p>
+    <div class="grid three">
+      <div class="card versant"><img src="img/bedoin.jpg?v=3" alt="The Bédoin forest"><div class="body">
+        <h3>Via Bédoin</h3><p>The royal road: the relentless forest, then the stone desert up to the summit.</p>
+        <div class="stats"><span>21.4 km</span><span class="hard">+1,582 m</span><span>7.4 %</span></div></div></div>
+      <div class="card versant"><img src="img/face_nord.jpg" alt="The north face of Mont Ventoux above the Toulourenc valley"><div class="body">
+        <h3>Via Malaucène</h3><p>The north face, its irregular ramps and Mont Serein, with the Giant in your sights.</p>
+        <div class="stats"><span>22.5 km</span><span class="hard">+1,571 m</span><span>7.0 %</span></div></div></div>
+      <div class="card versant"><img src="img/sault.jpg?v=3" alt="The forest, then the scree, above Chalet Reynard"><div class="body">
+        <h3>Via Sault</h3><p>The gentlest, between lavender and forest, up to Chalet Reynard and the last six kilometres.</p>
+        <div class="stats"><span>24.4 km</span><span class="hard">+1,192 m</span><span>4.9 %</span></div></div></div>
+    </div>
+    <p class="note">All three on the same day? The "Triple Giant" badge is yours.</p>
+  </div>
+</section>
+
+<section id="parcours">
+  <div class="wrap">
+    <div class="kicker">The route map</div>
+    <h2>The whole Vaucluse at your pedals.</h2>
+    <p class="lead">From a one-hour spin on the greenway to a full day around the Giant: real rides, recorded on the ground, and 25 to 40 km sections for a smart-trainer session. Pick a route on the map or in the list to discover it.</p>
+    <div class="filters" id="filters">
+      <button data-f="all" class="on">All</button>
+      <button data-f="free">Free</button>
+      <button data-f="ventoux">Mont Ventoux</button>
+      <button data-f="short">Under 40 km</button>
+      <button data-f="full">Full rides</button>
+    </div>
+    <div class="atlas">
+      <div>
+        <div class="map" id="map">
+          <img src="img/carte_relief.jpg" alt="Relief map of the Vaucluse, from Mont Ventoux to Gordes">
+          <svg id="routes" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="detail" id="detail" hidden></div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="wrap">
+    <div class="kicker">On video</div>
+    <h2>As if you were there.</h2>
+    <p class="lead">In-game footage, exactly as it appears on your screen.</p>
+    <div class="clip big">
+      <img src="video/bedoin.webp?v=1" loading="lazy" alt="Riding through Bédoin, past Provençal façades, shops, café terraces and passers-by">
+      <span>Riding through Bédoin</span>
+    </div>
+    <div class="grid three clips">
+      <div class="clip"><img src="video/foret.webp?v=4" loading="lazy" alt="Climbing through the Bédoin forest at 10 %, with the game dashboard"><span>Bédoin, 10 % in the forest</span></div>
+      <div class="clip"><img src="video/ventoux.webp?v=4" loading="lazy" alt="Climb via Malaucène, the white slopes of Mont Ventoux in the background"><span>The Giant in the background</span></div>
+      <div class="clip"><img src="video/via.webp?v=4" loading="lazy" alt="The Via Venaissia on a mountain bike under the plane trees"><span>The Via Venaissia by MTB</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="jeu">
+  <div class="wrap">
+    <div class="kicker">The game</div>
+    <h2>Every bend, every village, every percent.</h2>
+    <p class="lead">Mont Ventoux Online rebuilds Provence from the most accurate public data: IGN terrain (the French national mapping agency), OpenStreetMap buildings and roads, aerial photographs. No invented scenery: the real road.</p>
+
+    <div class="feature">
+      <img src="img/bedoin_foret.jpg" alt="Climbing the Ventoux in the Bédoin forest">
+      <div>
+        <h3>The real gradient, in your legs</h3>
+        <p>Your smart trainer receives the gradient of the road at every moment: the Bédoin forest, the ramps above Chalet Reynard, the final straight to the observatory.</p>
+        <p>Difficulty adapts to your level: a 10 % ramp can feel like 5 %.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/village.jpg" alt="Riding through Sault, between shops and Provençal facades">
+      <div>
+        <h3>Real villages, real streets</h3>
+        <p>Every house stands in its place, at its real height, with its shutters, tiles and shops. Village signs and street names roll by under your wheels.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/gordes_vue.jpg" alt="Gordes and the scrubland of the Monts de Vaucluse seen from above">
+      <div>
+        <h3>Landscapes you will recognise</h3>
+        <p>Holm oaks and pines on the hillsides, the Nesque gorges carved into the cliffs, the vineyards of the Dentelles, Gordes perched on its rock: the landscape is the one you know, right down to the white road markings.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/route_vivante.jpg" alt="Climbing towards the Ventoux: a mountain biker overtakes, a car and riders ahead">
+      <div>
+        <h3>A living road</h3>
+        <p>Other riders to follow or overtake (with drafting in their wheel), cars, tractors, flocks of sheep, cicadas in summer.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/meteo.jpg?v=3" alt="Riding in the rain through the vineyards of the Dentelles">
+      <div>
+        <h3>Today's weather… or the one you choose</h3>
+        <p><strong>Live</strong>: the game fetches the real Vaucluse weather when you ride. Wind, gusts, temperature, clouds and rain, with a stronger, colder wind at the top of the Ventoux than at its foot.</p>
+        <p>The wind really counts: a headwind slows you down, a tailwind pushes you, and villages shelter you. Fancy something else? Pick <strong>Sunny</strong>, <strong>Mistral</strong>, <strong>Overcast</strong> or <strong>Rain</strong> before you set off.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/ecran_plan_en.jpg" alt="The &quot;Get ready for the Ventoux&quot; training plan screen">
+      <div>
+        <h3>Train for real</h3>
+        <p>Workouts from 30 minutes to 1 h 30 (sweet spot, threshold, VO2max…) ridden on the route of your choice, in ERG mode. Complete plans, including an 8-week "Get ready for the Ventoux", with your fitness and fatigue day by day.</p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <img src="img/bedoin_village.jpg" alt="Bédoin, with Mont Ventoux on the horizon">
+      <div>
+        <h3>The summit must be earned</h3>
+        <p>The Ventoux grows with every hairpin. What awaits you up there, at 1,910 m? That's the surprise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="progression">
+  <div class="wrap">
+    <div class="kicker">Progression</div>
+    <h2>Ride. Progress. Collect.</h2>
+    <p class="lead">Every pedal stroke counts: experience is earned through effort, and consistency is rewarded. From Touring cyclist to Ventoux legend, fifty levels to climb.</p>
+    <div class="grid two prog">
+      <img class="shot" src="img/collection_en.jpg" alt="The collection: jerseys, frames and helmets to unlock">
+      <ul class="ticks">
+        <li><strong>Eleven jerseys</strong> to win: polka dots at the top of the Ventoux, Lavender, Roussillon ochres, Dentelles, Starry night… up to the <strong>Ventoux legend</strong> jersey.</li>
+        <li><strong>Frames and helmets</strong> in rainbow, tricolour, sunset, and gold MVO logos.</li>
+        <li><strong>19 badges</strong>: all three sides, Everest in total climbing, the Tour of Vaucluse…</li>
+        <li><strong>A challenge every month</strong>: 2,000 m of climbing, 8 workouts, 300 km…</li>
+        <li><strong>Timed segments</strong>, records and a ghost of your best time.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <div class="kicker">Planned pricing</div>
+    <h2>Start for free. Head for the summit whenever you like.</h2>
+    <p class="soon-note">The game is being finalised with a group of testers. The prices below are those planned at launch and may still change. <a href="mailto:contact@montventouxonline.fr?subject=Let%20me%20know%20when%20Mont%20Ventoux%20Online%20is%20out">Write to us</a> to be notified at launch.</p>
+      <div class="offer">
+      <div class="card"><div class="body">
+        <h3>Free</h3>
+        <div class="price">€0</div>
+        <ul class="ticks">
+          <li><strong>4 routes</strong>, four faces of the Vaucluse: the Via Venaissia under the plane trees, the Col de Suzette in the Dentelles, the road to Vaison-la-Romaine, the climb to Gordes</li>
+          <li>Your smart trainer and heart-rate monitor over Bluetooth</li>
+          <li>A summary after every ride</li>
+          <li>The first 5 levels, badges and the monthly challenge</li>
+        </ul>
+        <span class="btn ghost disabled" aria-disabled="true">Coming soon</span>
+      </div></div>
+      <div class="card highlight"><div class="body">
+        <h3>Subscription</h3>
+        <div class="price">€5.99 <small>/ month</small></div>
+        <p class="sub">No commitment, cancel at any time.</p>
+        <ul class="ticks">
+          <li><strong>All 26 routes</strong>, including all three sides of Mont Ventoux</li>
+          <li>New routes, month after month</li>
+          <li>Workouts and training plans, FTP tests</li>
+          <li>All 50 levels and everything they unlock: jerseys, frames, helmets</li>
+          <li>Segments, records, ghosts</li>
+        </ul>
+        <span class="btn disabled" aria-disabled="true">Coming soon</span>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="materiel">
+  <div class="wrap">
+    <div class="kicker">Equipment</div>
+    <h2>Your smart trainer, your heart-rate monitor, your PC.</h2>
+    <div class="grid two">
+      <ul class="ticks">
+        <li>A <strong>Bluetooth</strong> smart trainer (FTMS standard, used by most recent connected trainers): live gradient, ERG mode during workouts.</li>
+        <li>A <strong>Bluetooth heart-rate</strong> strap or watch.</li>
+        <li><strong>Guided calibration</strong> in the game for an accurate feel.</li>
+      </ul>
+      <ul class="ticks">
+        <li>A PC running <strong>Windows 10 or 11</strong> (64-bit) with Bluetooth.</li>
+        <li>Works <strong>offline</strong> once installed.</li>
+        <li>Export your rides as <strong>GPX</strong>.</li>
+        <li>The game is available in <strong>English and French</strong>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="kicker">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <details open><summary>When will the game be available?</summary><p>Mont Ventoux Online is in testing (beta) with a group of cyclists. Launch is planned soon: <a href="mailto:contact@montventouxonline.fr?subject=Let%20me%20know%20when%20Mont%20Ventoux%20Online%20is%20out">write to us</a> to be notified as soon as it can be downloaded.</p></details>
+    <details><summary>What does the free version include?</summary><p>Four complete routes to ride with your smart trainer and heart-rate monitor, with no time limit or ride limit, the first five progression levels, badges and the monthly challenge.</p></details>
+    <details><summary>How does the subscription work?</summary><p>€5.99 per month, no commitment: cancel whenever you like, access stays open until the end of the paid month. Your progress is kept. In the free version your experience keeps counting beyond level 5: when you subscribe, you instantly get the level you have really earned.</p></details>
+    <details><summary>Is my smart trainer compatible?</summary><p>The game connects to Bluetooth smart trainers that follow the FTMS standard, which is the case for most recent connected models.</p></details>
+    <details><summary>Do I need an internet connection to ride?</summary><p>Not all the time: routes are installed on your PC and can be ridden offline. The game checks your subscription online at launch; that check stays valid for 7 days, so you only need to connect at least once a week. The internet is also used for today's weather.</p></details>
+    <details><summary>Are the roads really real?</summary><p>Yes: the terrain comes from IGN, the roads, buildings and shops from OpenStreetMap, the ground colours from IGN aerial photographs. The routes are real rides recorded by GPS.</p></details>
+    <details><summary>Can I play without a smart trainer?</summary><p>Yes, with the keyboard, to discover the routes. In this mode no performance is saved: it is a trial ride.</p></details>
+    <details><summary>Does the game run on Mac?</summary><p>Not yet: Windows 10 or 11 PCs only.</p></details>
+    <details><summary>Is the game in English?</summary><p>Yes. The game is available in English and French; switch with the FR / EN button at the top of the main menu.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Mont Ventoux Online<br>Data: © OpenStreetMap contributors (ODbL), terrain and aerial photographs © IGN (Licence ouverte).</div>
+    <div><a href="mailto:contact@montventouxonline.fr">Contact</a> · <a href="mentions-legales.html">Legal notice</a> · <a href="confidentialite.html">Privacy</a> (in French)</div>
+  </div>
+</footer>
+
+<script src="data/parcours.js?v=4"></script>
+<script>
+// Carte des parcours : tracés sur le relief, liste filtrable, fiche du parcours survolé.
+(function () {
+  // Version anglaise : noms, sous-titres et difficultés traduits (table du jeu, i18n/en_*.tsv).
+  var T = {"Du côté de Vaison": "Around Vaison", "Tour du Géant": "Tour of the Giant", "Le gros cailloux": "The big rock", "La montée mythique": "The legendary climb", "Direction Gordes": "Towards Gordes", "Mont Ventoux par Sault": "Mont Ventoux via Sault", "Caromb – sommet du Ventoux": "Caromb – Ventoux summit", "Les Dentelles puis le Géant": "The Dentelles, then the Giant", "Le piémont du Ventoux": "Ventoux foothills", "Vers Gordes": "Towards Gordes", "Monts de Vaucluse": "Vaucluse Mountains", "Vers Vaison par les Dentelles": "To Vaison via the Dentelles", "Mazan et la Nesque": "Mazan and the Nesque", "Plateau de Sault": "Sault plateau", "Face nord du Géant": "North face of the Giant", "Promenade sur la Via": "Ride on the Via", "Mont Ventoux par Malaucène": "Mont Ventoux via Malaucène", "Descente sur Bédoin": "Descent to Bédoin", "Villages des Dentelles": "Villages of the Dentelles", "De Vaison à Malaucène": "From Vaison to Malaucène", "Gorges de la Nesque": "Nesque Gorges", "Vallée du Toulourenc": "Toulourenc valley", "Voie verte sous les platanes, vignes du Comtat": "Greenway under the plane trees, Comtat vineyards", "Dentelles de Montmirail et pont romain": "Dentelles de Montmirail and the Roman bridge", "Grande boucle autour du Mont Ventoux": "Big loop around Mont Ventoux", "Ventoux par Malaucène, descente par Bédoin": "Ventoux via Malaucène, descent via Bédoin", "Caromb, Bédoin, le Ventoux par la forêt et retour": "Caromb, Bédoin, the Ventoux through the forest and back", "Beaumes, Caromb, Bédoin et le col vers Le Barroux": "Beaumes, Caromb, Bédoin and the pass towards Le Barroux", "Pernes, Gordes, Murs et Venasque": "Pernes, Gordes, Murs and Venasque", "La montée seule : la lavande, la forêt, le Chalet Reynard et le sommet": "The climb alone: lavender, the forest, Chalet Reynard and the summit", "Par Bédoin et la forêt, jusqu'à l'observatoire": "Via Bédoin and the forest, up to the observatory", "Beaumes, col de Suzette, Malaucène et le Ventoux": "Beaumes, Col de Suzette, Malaucène and the Ventoux", "De Beaumes au Barroux par Bédoin et la Madeleine": "From Beaumes to Le Barroux via Bédoin and the Madeleine", "Monteux, Pernes, Saint-Didier et la montée vers Gordes": "Monteux, Pernes, Saint-Didier and the climb to Gordes", "Gordes, Murs, Venasque puis Pernes-les-Fontaines": "Gordes, Murs, Venasque then Pernes-les-Fontaines", "Retour au pied du Ventoux jusqu'à Loriol": "Back along the foot of the Ventoux to Loriol", "Mormoiron, Villes-sur-Auzon et les gorges": "Mormoiron, Villes-sur-Auzon and the gorges", "Monieux, Sault, Aurel et la vallée du Toulourenc": "Monieux, Sault, Aurel and the Toulourenc valley", "Brantes, Saint-Léger, Malaucène et Le Barroux": "Brantes, Saint-Léger, Malaucène and Le Barroux", "De Loriol à Jonquières par l'ancienne voie ferrée": "From Loriol to Jonquières along the old railway", "La montée seule : 21 km jusqu'à l'observatoire": "The climb alone: 21 km to the observatory", "Du sommet au Chalet Reynard, puis la forêt": "From the summit to Chalet Reynard, then the forest", "Beaumes-de-Venise, Lafare et les Dentelles": "Beaumes-de-Venise, Lafare and the Dentelles", "Sablet, Séguret, puis Vaison-la-Romaine": "Sablet, Séguret, then Vaison-la-Romaine", "Le long de l'Ouvèze, au pied du Géant": "Along the Ouvèze, at the foot of the Giant", "La route des gorges jusqu'à Monieux": "The gorge road up to Monieux", "Savoillan, Brantes et la face nord du Ventoux": "Savoillan, Brantes and the north face of the Ventoux", "Modéré": "Moderate", "Difficile": "Hard", "Très difficile": "Very hard", "Facile": "Easy"};
+  var t = function (s) { return T[s] || s; };
+  var data = (window.PARCOURS || []).map(function (p) {
+    var q = Object.assign({}, p); q.name = t(p.name); q.tagline = t(p.tagline); q.difficultyLabel = t(p.difficulty); return q;
+  });
+  var size = window.CARTE || { w: 1000, h: 750 };
+  var svg = document.getElementById("routes");
+  var list = document.getElementById("list");
+  var detail = document.getElementById("detail");
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 1000, H = Math.round(1000 * size.h / size.w);
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  var diffClass = { "Facile": "d1", "Modéré": "d2", "Difficile": "d3", "Très difficile": "d4" };
+  var fr = function (n, dec) { return n.toLocaleString("en-GB", { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }); };
+  var full = data.filter(function (p) { return p.full; });
+  document.getElementById("n-parcours").textContent = data.length;
+  document.getElementById("n-km").textContent = fr(full.reduce(function (s, p) { return s + p.km; }, 0));
+
+  // Les sorties complètes d'abord (dessous), les portions par-dessus.
+  var order = data.slice().sort(function (a, b) { return (b.full ? 1 : 0) - (a.full ? 1 : 0) || b.km - a.km; });
+  var paths = {}, items = {};
+  order.forEach(function (p) {
+    var d = p.line.map(function (q, i) { return (i ? "L" : "M") + (q[0] * W).toFixed(1) + " " + (q[1] * H).toFixed(1); }).join(" ");
+    var halo = document.createElementNS(NS, "path");
+    halo.setAttribute("d", d); halo.setAttribute("class", "halo");
+    var path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", "route " + (p.free ? "free" : "paid") + (p.full ? "" : " portion"));
+    path.addEventListener("mouseenter", function () { focus(p.id); });
+    path.addEventListener("click", function () { focus(p.id, true); });
+    var hit = document.createElementNS(NS, "path");
+    hit.setAttribute("d", d); hit.setAttribute("class", "hit");
+    hit.addEventListener("mouseenter", function () { focus(p.id); });
+    hit.addEventListener("click", function () { focus(p.id, true); });
+    svg.appendChild(halo); svg.appendChild(path); svg.appendChild(hit);
+    paths[p.id] = [halo, path, hit];
+  });
+
+  data.slice().sort(function (a, b) { return (b.full ? 1 : 0) - (a.full ? 1 : 0) || a.km - b.km; }).forEach(function (p) {
+    var el = document.createElement("button");
+    el.className = "item";
+    el.innerHTML = '<span class="name">' + p.name + '</span>' +
+      '<span class="meta"><span class="tag ' + (p.free ? "free" : "paid") + '">' + (p.free ? "Free" : "Subscribers") + '</span>' +
+      fr(p.km, 1) + ' km · ' + fr(p.dplus) + ' m D+ · <span class="' + diffClass[p.difficulty] + '">' + p.difficultyLabel + '</span></span>';
+    el.addEventListener("mouseenter", function () { focus(p.id); });
+    el.addEventListener("click", function () {
+      focus(p.id, true);
+      // Téléphone : la fiche est au-dessus de la liste, on la ramène à l'écran.
+      if (window.matchMedia("(max-width: 900px)").matches) detail.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+    list.appendChild(el);
+    items[p.id] = el;
+  });
+
+  function profile(p) {
+    var lo = Math.min.apply(null, p.profile), hi = Math.max.apply(null, p.profile), span = Math.max(hi - lo, 50);
+    var pts = p.profile.map(function (z, i) { return (i * 300 / (p.profile.length - 1)).toFixed(1) + "," + (56 - (z - lo) / span * 50).toFixed(1); });
+    return '<svg class="profile" viewBox="0 0 300 60" preserveAspectRatio="none"><polygon points="0,60 ' + pts.join(" ") + ' 300,60"/></svg>';
+  }
+
+  var current = null;
+  function focus(id, scroll) {
+    var p = data.filter(function (x) { return x.id === id; })[0];
+    if (!p) return;
+    if (current && paths[current]) { paths[current][1].classList.remove("on"); items[current].classList.remove("on"); }
+    current = id;
+    svg.classList.add("focus");
+    paths[id][1].classList.add("on");
+    paths[id].forEach(function (el) { svg.appendChild(el); });      // au premier plan
+    items[id].classList.add("on");
+    if (scroll) items[id].scrollIntoView({ block: "nearest", behavior: "smooth" });
+    detail.hidden = false;
+    detail.innerHTML = '<div class="dh"><strong>' + p.name + '</strong><span class="tag ' + (p.free ? "free" : "paid") + '">' +
+      (p.free ? "Free" : "Subscribers") + '</span></div><p>' + p.tagline + '</p>' +
+      '<div class="stats"><span>' + fr(p.km, 1) + ' km</span><span>' + fr(p.dplus) + ' m D+</span><span>' + fr(p.alt_max) +
+      ' m max.</span><span class="' + diffClass[p.difficulty] + '">' + p.difficultyLabel + '</span></div>' + profile(p);
+  }
+
+  var filters = {
+    all: function () { return true; },
+    free: function (p) { return p.free; },
+    ventoux: function (p) { return p.ventoux; },
+    short: function (p) { return p.km <= 40; },
+    full: function (p) { return p.full; }
+  };
+  document.getElementById("filters").addEventListener("click", function (e) {
+    var f = e.target.getAttribute("data-f");
+    if (!f) return;
+    [].forEach.call(this.children, function (b) { b.classList.toggle("on", b === e.target); });
+    data.forEach(function (p) {
+      var show = filters[f](p);
+      items[p.id].hidden = !show;
+      paths[p.id].forEach(function (el) { el.style.display = show ? "" : "none"; });
+    });
+    var first = data.filter(filters[f]).sort(function (a, b) { return a.km - b.km; })[0];
+    if (first) focus(first.id, true);
+  });
+  var start = data.filter(function (p) { return p.id === "gpx_montee_bedoin"; })[0] || data[0];
+  if (start) focus(start.id);
+})();
+</script>
+<script>
+// Menu du téléphone.
+(function () {
+  var top = document.getElementById("top"), btn = document.getElementById("menu");
+  btn.addEventListener("click", function () {
+    var open = top.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open); btn.textContent = open ? "✕" : "☰";
+  });
+  document.getElementById("nav").addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { top.classList.remove("open"); btn.setAttribute("aria-expanded", false); btn.textContent = "☰"; }
+  });
+})();
+</script>
+</body>
+</html>
