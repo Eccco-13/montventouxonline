@@ -317,3 +317,21 @@ form.contact button { justify-self: start; border: 0; cursor: pointer; font: inh
 @media (max-width: 860px) { form.contact, form.contact fieldset { grid-template-columns: 1fr; } .rubriques { grid-template-columns: repeat(2, 1fr); } }
 
 .contact-page h2 { font-size: clamp(26px, 3.4vw, 38px); margin-top: 0; }
+
+/* Vues de caméra et commandes à la souris (section Maquette) */
+.camera { display: grid; grid-template-columns: 1fr 1.25fr; gap: 32px; align-items: center; margin-top: 48px; }
+.camera h3, .views-title { font-size: 24px; margin: 0 0 10px; }
+.camera p { color: var(--muted, #b9b9c0); }
+.mouse { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; }
+.mouse li { padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); }
+kbd { display: inline-block; min-width: 1.6em; padding: 1px 7px; border-radius: 6px; border: 1px solid var(--line);
+      border-bottom-width: 3px; background: var(--bg-2); font: 700 14px/1.4 inherit; text-align: center; color: inherit; }
+.views-title { margin-top: 48px; }
+.views { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+.views figure { margin: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); }
+.views img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.views figure { position: relative; }
+.maquette .views figcaption { position: static; background: none; border-radius: 0; padding: 8px 12px; font-weight: 700; font-size: 15px; }
+.views .tv { display: flex; align-items: center; padding: 16px; }
+.views .tv p { margin: 8px 0 0; font-size: 14px; }
+@media (max-width: 860px) { .camera { grid-template-columns: 1fr; } .views { grid-template-columns: repeat(2, 1fr); } }
