@@ -335,3 +335,14 @@ kbd { display: inline-block; min-width: 1.6em; padding: 1px 7px; border-radius: 
 .views .tv { display: flex; align-items: center; padding: 16px; }
 .views .tv p { margin: 8px 0 0; font-size: 14px; }
 @media (max-width: 860px) { .camera { grid-template-columns: 1fr; } .views { grid-template-columns: repeat(2, 1fr); } }
+
+/* Section Entraînement */
+.plans { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+.plans li { margin-bottom: 8px; }
+.plans strong { color: #fff; }
+.steps-title { font-size: 24px; margin: 8px 0 14px; }
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.steps li { counter-increment: step; position: relative; padding: 46px 16px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); color: var(--muted); font-size: 15px; }
+.steps li::before { content: counter(step); position: absolute; left: 16px; top: 12px; width: 26px; height: 26px; border-radius: 50%; background: var(--red); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 14px; }
+.steps strong { color: #fff; display: block; margin-bottom: 4px; }
+@media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
