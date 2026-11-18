@@ -6,7 +6,7 @@
   <title>Mont Ventoux Online — le Ventoux et le Vaucluse sur votre home trainer</title>
   <meta name="description" content="Grimpez le Mont Ventoux par ses trois versants, traversez les Dentelles, Gordes et la Via Venaissia : 26 parcours réels du Vaucluse pour votre home trainer. Relief IGN, villages réels, météo du jour.">
   <link rel="icon" type="image/png" href="img/icone.png">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <meta property="og:title" content="Mont Ventoux Online">
   <meta property="og:description" content="Le Géant de Provence et tout le Vaucluse, sur votre home trainer.">
   <meta property="og:image" content="img/hero.jpg">
@@ -21,11 +21,12 @@
     <nav class="main" id="nav">
       <a href="#ventoux">Le Géant</a>
       <a href="#parcours">Parcours</a>
-      <a href="#videos">Vidéos</a>
+      <a href="#maquette">Mode Maquette</a>
       <a href="#jeu">Le jeu</a>
-      <a href="#progression">Progression</a>
+      <a href="#defi">Défi du mois</a>
       <a href="#tarifs">Tarifs</a>
       <a href="#faq">FAQ</a>
+      <a href="contact.html">Contact</a>
     </nav>
     <div class="right">
       <a class="lang" href="en.html" hreflang="en" title="English version">EN</a>
@@ -41,18 +42,18 @@
     <div class="soon-badge">Bientôt disponible • bêta en cours</div>
     <h1>Le Ventoux vous attend. Dans votre salon.</h1>
     <p>Les lacets de la forêt de Bédoin, le pierrier blanc au-dessus du Chalet Reynard, les gorges de la Nesque, Gordes perché sur son rocher, les villages des Dentelles : le Vaucluse reconstitué au mètre près, pour votre home trainer.</p>
-    <a class="btn" href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">Être prévenu de la sortie</a>
+    <a class="btn" href="contact.html?rubrique=avant_achat">Être prévenu de la sortie</a>
     <a class="btn ghost" href="#parcours">Explorer la carte</a>
   </div>
 </div>
 
 <div class="numbers">
   <div class="wrap">
-    <div><strong id="n-parcours">26</strong><span>parcours réels</span></div>
-    <div><strong id="n-km">527</strong><span>km de routes du Vaucluse</span></div>
-    <div><strong>3</strong><span>versants du Mont Ventoux</span></div>
-    <div><strong>1 910 m</strong><span>au sommet du Géant</span></div>
-    <div><strong>50</strong><span>niveaux à gravir</span></div>
+    <div><strong id="n-parcours" data-count="27">27</strong><span>parcours réels</span></div>
+    <div><strong id="n-km" data-count="533">533</strong><span>km de routes du Vaucluse</span></div>
+    <div><strong data-count="3">3</strong><span>versants du Mont Ventoux</span></div>
+    <div><strong data-count="1912" data-suffix=" m">1 912 m</strong><span>au sommet du Géant</span></div>
+    <div><strong data-count="50">50</strong><span>niveaux à gravir</span></div>
   </div>
 </div>
 
@@ -62,15 +63,15 @@
     <h2>Trois versants. Trois façons de souffrir. Une seule légende.</h2>
     <p class="lead">Chaque montée est chronométrée de son village jusqu'à l'observatoire, avec les bornes kilométriques blanches et jaunes qui égrènent l'altitude et la pente du kilomètre suivant, comme sur la vraie route.</p>
     <div class="grid three">
-      <div class="card versant"><img src="img/bedoin.jpg?v=3" alt="La forêt de Bédoin"><div class="body">
+      <a class="card versant reveal" href="bedoin.html"><img src="img/bedoin_foret_pres.jpg" alt="La forêt de Bédoin, au-dessus de 9 %"><div class="body">
         <h3>Par Bédoin</h3><p>La voie royale : la forêt sans répit, puis le désert de pierres jusqu'au sommet.</p>
-        <div class="stats"><span>21,4 km</span><span class="hard">+1 582 m</span><span>7,4 %</span></div></div></div>
-      <div class="card versant"><img src="img/face_nord.jpg" alt="La face nord du Mont Ventoux au-dessus de la vallée du Toulourenc"><div class="body">
-        <h3>Par Malaucène</h3><p>La face nord, ses rampes irrégulières et le Mont Serein, le Géant en ligne de mire.</p>
-        <div class="stats"><span>22,5 km</span><span class="hard">+1 571 m</span><span>7,0 %</span></div></div></div>
-      <div class="card versant"><img src="img/sault.jpg?v=3" alt="La forêt puis le pierrier, au-dessus du Chalet Reynard"><div class="body">
+        <div class="stats"><span>21,4 km</span><span class="hard">+1 587 m</span><span>7,4 %</span></div><span class="more">Découvrir la montée →</span></div></a>
+      <a class="card versant reveal d1" href="malaucene.html"><img src="img/malaucene_serein.jpg" alt="Au-dessus du Mont Serein, sur la face nord"><div class="body">
+        <h3>Par Malaucène</h3><p>La face nord, ses rampes à 11 % et le Mont Serein, le Géant en ligne de mire.</p>
+        <div class="stats"><span>21,1 km</span><span class="hard">+1 565 m</span><span>7,4 %</span></div><span class="more">Découvrir la montée →</span></div></a>
+      <a class="card versant reveal d2" href="sault.html"><img src="img/sault_depart.jpg" alt="Le départ de Sault par la route du Ventoux"><div class="body">
         <h3>Par Sault</h3><p>La plus douce, entre lavande et forêt, jusqu'au Chalet Reynard et aux six derniers kilomètres.</p>
-        <div class="stats"><span>24,4 km</span><span class="hard">+1 192 m</span><span>4,9 %</span></div></div></div>
+        <div class="stats"><span>25,9 km</span><span class="hard">+1 210 m</span><span>4,4 %</span></div><span class="more">Découvrir la montée →</span></div></a>
     </div>
     <p class="note">Les trois le même jour ? Le badge « Triple Géant » est pour vous.</p>
   </div>
@@ -101,6 +102,23 @@
   </div>
 </section>
 
+<section id="maquette" class="maquette">
+  <div class="wrap">
+    <div class="kicker">Mode Maquette</div>
+    <h2>Le Vaucluse comme une maquette vivante.</h2>
+    <p class="lead">Prenez de la hauteur : lumière dorée de fin de journée, ombres douces, relief sculpté en strates, et un flou de miniature qui fait de chaque vue d'en haut une maquette de collectionneur. Redescendez derrière votre roue : la route reste nette, au mètre près.</p>
+    <div class="mosaic">
+      <figure class="reveal"><img src="img/maquette_foret.jpg" alt="La route de Bédoin dans la forêt, vue d'en haut avec l'effet miniature" loading="lazy"><figcaption>La forêt de Bédoin</figcaption></figure>
+      <figure class="reveal d1"><img src="img/maquette_serein.jpg" alt="Les lacets au-dessus du Mont Serein, vus d'en haut" loading="lazy"><figcaption>Le Mont Serein</figcaption></figure>
+      <figure class="reveal d2"><img src="img/maquette_sault.jpg" alt="Sault et la route du Ventoux, vus d'en haut" loading="lazy"><figcaption>Sault et son plateau</figcaption></figure>
+    </div>
+    <div class="clip big reveal" style="margin-top: 22px">
+      <img src="video/maquette.webp?v=1" loading="lazy" alt="Vue d'en haut de la montée de Bédoin, avec l'effet miniature">
+      <span>Le mode Maquette en mouvement</span>
+    </div>
+  </div>
+</section>
+
 <section id="videos">
   <div class="wrap">
     <div class="kicker">En vidéo</div>
@@ -112,7 +130,7 @@
     </div>
     <div class="grid three clips">
       <div class="clip"><img src="video/foret.webp?v=4" loading="lazy" alt="Montée dans la forêt de Bédoin, à 10 %, avec le tableau de bord du jeu"><span>Bédoin, 10 % dans la forêt</span></div>
-      <div class="clip"><img src="video/ventoux.webp?v=4" loading="lazy" alt="Montée par Malaucène, les pentes blanches du Mont Ventoux en toile de fond"><span>Le Géant en toile de fond</span></div>
+      <div class="clip"><img src="video/ventoux.webp?v=5" loading="lazy" alt="Montée par Malaucène, la face nord à 11 %"><span>La face nord, à 11 %</span></div>
       <div class="clip"><img src="video/via.webp?v=4" loading="lazy" alt="La Via Venaissia en VTT sous les platanes"><span>La Via Venaissia en VTT</span></div>
     </div>
   </div>
@@ -124,7 +142,7 @@
     <h2>Chaque virage, chaque village, chaque pourcent.</h2>
     <p class="lead">Mont Ventoux Online reconstruit la Provence à partir des données publiques les plus précises : relief de l'IGN, bâtiments et routes d'OpenStreetMap, photographies aériennes. Pas un décor inventé : la vraie route.</p>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/bedoin_foret.jpg" alt="Montée du Ventoux dans la forêt de Bédoin">
       <div>
         <h3>La pente réelle, dans les jambes</h3>
@@ -133,7 +151,7 @@
       </div>
     </div>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/village.jpg" alt="Traversée de Sault, entre boutiques et façades provençales">
       <div>
         <h3>De vrais villages, de vraies rues</h3>
@@ -141,7 +159,7 @@
       </div>
     </div>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/gordes_vue.jpg?v=2" alt="Gordes et la garrigue des monts de Vaucluse vus d'en haut">
       <div>
         <h3>Des paysages que vous reconnaîtrez</h3>
@@ -149,15 +167,15 @@
       </div>
     </div>
 
-    <div class="feature">
-      <img src="img/route_vivante.jpg" alt="Montée vers le Ventoux : un vététiste double, une voiture et des cyclistes devant">
+    <div class="feature reveal">
+      <img src="img/bedoin_foret_pres.jpg" alt="Montée du Ventoux dans la forêt : une voiture et des cyclistes devant">
       <div>
         <h3>Une route vivante</h3>
-        <p>D'autres cyclistes à suivre ou à doubler (avec l'aspiration dans leur roue), des voitures, des tracteurs, des troupeaux, les cigales l'été.</p>
+        <p>D'autres cyclistes à suivre ou à doubler (avec l'aspiration dans leur roue), des voitures, des tracteurs, des troupeaux, des coureurs et des promeneurs qui s'écartent à votre passage, les cigales l'été.</p>
       </div>
     </div>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/meteo.jpg?v=3" alt="Sortie sous la pluie dans les vignes des Dentelles">
       <div>
         <h3>La météo du jour… ou celle de votre choix</h3>
@@ -166,7 +184,7 @@
       </div>
     </div>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/ecran_plan.jpg?v=3" alt="Écran du plan d'entraînement « Préparer le Ventoux »">
       <div>
         <h3>S'entraîner pour de vrai</h3>
@@ -174,11 +192,11 @@
       </div>
     </div>
 
-    <div class="feature">
+    <div class="feature reveal">
       <img src="img/bedoin_village.jpg" alt="Bédoin, le Mont Ventoux à l'horizon">
       <div>
         <h3>Le sommet se mérite</h3>
-        <p>Le Ventoux grandit à chaque lacet. Ce qui vous attend là-haut, à 1 910 m ? Ce sera la surprise.</p>
+        <p>Le Ventoux grandit à chaque lacet. Ce qui vous attend là-haut, à 1 912 m ? Ce sera la surprise.</p>
       </div>
     </div>
   </div>
@@ -195,10 +213,19 @@
         <li><strong>Onze maillots</strong> à gagner : à pois au sommet du Ventoux, Lavande, Ocres de Roussillon, Dentelles, Nuit étoilée… jusqu'au maillot <strong>Légende du Ventoux</strong>.</li>
         <li><strong>Cadres et casques</strong> arc-en-ciel, tricolores, coucher de soleil, et les logos MVO dorés.</li>
         <li><strong>19 badges</strong> : les trois versants, l'Everest en dénivelé cumulé, le Tour du Vaucluse…</li>
-        <li><strong>Un défi chaque mois</strong> : 2 000 m de dénivelé, 8 séances, 300 km…</li>
+        <li><strong>Un défi chaque mois</strong>, au fil des saisons : « Sous le Mistral » en février, « Route des lavandes » en juillet, « Les trois versants » en juin…</li>
         <li><strong>Segments chronométrés</strong>, records et fantôme de votre meilleur passage.</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<section id="defi">
+  <div class="wrap">
+    <div class="kicker">Défi du mois</div>
+    <h2>Un nouveau défi chaque mois, au rythme des saisons.</h2>
+    <p class="lead">Le Mistral en hiver, les Dentelles en fleurs au printemps, la lavande en juillet, les vendanges en septembre : douze défis qui suivent la vie du Vaucluse. Réussissez-le avant la fin du mois pour gagner 500 points d'expérience et un badge daté dans votre collection.</p>
+    <div class="defi reveal" id="defi-widget"></div>
   </div>
 </section>
 
@@ -206,7 +233,7 @@
   <div class="wrap">
     <div class="kicker">Tarifs prévus</div>
     <h2>Commencez gratuitement. Montez au sommet quand vous voulez.</h2>
-    <p class="soon-note">Le jeu est en cours de finalisation, avec un groupe de testeurs. Les tarifs ci-dessous sont ceux prévus à la sortie et peuvent encore évoluer. <a href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">Écrivez-nous</a> pour être prévenu de la sortie.</p>
+    <p class="soon-note">Le jeu est en cours de finalisation, avec un groupe de testeurs. Les tarifs ci-dessous sont ceux prévus à la sortie et peuvent encore évoluer. <a href="contact.html?rubrique=avant_achat">Écrivez-nous</a> pour être prévenu de la sortie.</p>
       <div class="offer">
       <div class="card"><div class="body">
         <h3>Gratuit</h3>
@@ -224,7 +251,7 @@
         <div class="price">5,99 € <small>/ mois</small></div>
         <p class="sub">Sans engagement, résiliable à tout moment.</p>
         <ul class="ticks">
-          <li><strong>Les 26 parcours</strong>, dont les trois versants du Mont Ventoux</li>
+          <li><strong>Les 27 parcours</strong>, dont les trois versants du Mont Ventoux</li>
           <li>Les nouveaux parcours, au fil des mois</li>
           <li>Séances et plans d'entraînement, tests de FTP</li>
           <li>Les 50 niveaux et tout ce qu'ils débloquent : maillots, cadres, casques</li>
@@ -259,7 +286,8 @@
   <div class="wrap">
     <div class="kicker">FAQ</div>
     <h2>Questions fréquentes</h2>
-    <details open><summary>Quand le jeu sera-t-il disponible ?</summary><p>Mont Ventoux Online est en phase de test (bêta) avec un groupe de cyclistes. La sortie est prévue prochainement : <a href="mailto:contact@montventouxonline.fr?subject=Pr%C3%A9venez-moi%20de%20la%20sortie%20de%20Mont%20Ventoux%20Online">écrivez-nous</a> pour être prévenu dès qu'il sera téléchargeable.</p></details>
+    <details open><summary>Quand le jeu sera-t-il disponible ?</summary><p>Mont Ventoux Online est en phase de test (bêta) avec un groupe de cyclistes. La sortie est prévue prochainement : <a href="contact.html?rubrique=avant_achat">écrivez-nous</a> pour être prévenu dès qu'il sera téléchargeable.</p></details>
+    <details><summary>Comment vous contacter ?</summary><p>Par le <a href="contact.html">formulaire de contact</a> : choisissez le sujet de votre message (question avant achat, problème technique, abonnement, idée), il arrive directement à la bonne personne.</p></details>
     <details><summary>Que comprend la version gratuite ?</summary><p>Quatre parcours complets à rouler avec votre home trainer et votre cardio, sans limite de temps ni de nombre de sorties, les cinq premiers niveaux de progression, les badges et le défi du mois.</p></details>
     <details><summary>Comment fonctionne l'abonnement ?</summary><p>5,99 € par mois, sans engagement : vous résiliez quand vous voulez, l'accès reste ouvert jusqu'à la fin du mois payé. Votre progression est conservée. En version gratuite, votre expérience continue de compter au-delà du niveau 5 : en vous abonnant, vous retrouvez aussitôt le niveau réellement gagné.</p></details>
     <details><summary>Mon home trainer est-il compatible ?</summary><p>Le jeu se connecte aux home trainers Bluetooth qui suivent la norme FTMS, ce qui est le cas de la plupart des modèles connectés récents.</p></details>
@@ -273,11 +301,11 @@
 <footer>
   <div class="wrap">
     <div>© 2026 Mont Ventoux Online<br>Données : © OpenStreetMap contributors (ODbL), relief et photographies aériennes © IGN (Licence ouverte).</div>
-    <div><a href="mailto:contact@montventouxonline.fr">Contact</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    <div><a href="contact.html">Contact</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
   </div>
 </footer>
 
-<script src="data/parcours.js?v=4"></script>
+<script src="data/parcours.js?v=5"></script>
 <script>
 // Carte des parcours : tracés sur le relief, liste filtrable, fiche du parcours survolé.
 (function () {
@@ -292,8 +320,10 @@
   var diffClass = { "Facile": "d1", "Modéré": "d2", "Difficile": "d3", "Très difficile": "d4" };
   var fr = function (n, dec) { return n.toLocaleString("fr-FR", { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }); };
   var full = data.filter(function (p) { return p.full; });
-  document.getElementById("n-parcours").textContent = data.length;
-  document.getElementById("n-km").textContent = fr(full.reduce(function (s, p) { return s + p.km; }, 0));
+  var nP = document.getElementById("n-parcours"), nK = document.getElementById("n-km");
+  var km = Math.round(full.reduce(function (s, p) { return s + p.km; }, 0));
+  nP.setAttribute("data-count", data.length); nP.textContent = data.length;
+  nK.setAttribute("data-count", km); nK.textContent = fr(km);
 
   // Les sorties complètes d'abord (dessous), les portions par-dessus.
   var order = data.slice().sort(function (a, b) { return (b.full ? 1 : 0) - (a.full ? 1 : 0) || b.km - a.km; });
@@ -378,18 +408,7 @@
   if (start) focus(start.id);
 })();
 </script>
-<script>
-// Menu du téléphone.
-(function () {
-  var top = document.getElementById("top"), btn = document.getElementById("menu");
-  btn.addEventListener("click", function () {
-    var open = top.classList.toggle("open");
-    btn.setAttribute("aria-expanded", open); btn.textContent = open ? "✕" : "☰";
-  });
-  document.getElementById("nav").addEventListener("click", function (e) {
-    if (e.target.tagName === "A") { top.classList.remove("open"); btn.setAttribute("aria-expanded", false); btn.textContent = "☰"; }
-  });
-})();
-</script>
+<script src="data/defis.js?v=1"></script>
+<script src="js/site.js?v=1"></script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Mont Ventoux Online</title>
+  <meta name="description" content="Une question avant d'acheter, un souci technique, votre abonnement, une idée de parcours : écrivez à l'équipe de Mont Ventoux Online.">
+  <link rel="icon" type="image/png" href="img/icone.png">
+  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="alternate" hreflang="fr" href="contact.html">
+  <link rel="alternate" hreflang="en" href="en-contact.html">
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="img/icone.png" alt="">Mont Ventoux Online</a>
+    <nav class="main" id="nav">
+      <a href="index.html#ventoux">Le Géant</a>
+      <a href="index.html#parcours">Parcours</a>
+      <a href="index.html#maquette">Mode Maquette</a>
+      <a href="index.html#defi">Défi du mois</a>
+      <a href="index.html#tarifs">Tarifs</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <div class="right">
+      <a class="lang" href="en-contact.html" hreflang="en" title="English version">EN</a>
+      <button class="menu" id="menu" aria-label="Menu" aria-controls="nav" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="legal contact-page">
+  <div class="wrap">
+    <div class="kicker">Contact</div>
+    <h2>Écrivez-nous</h2>
+    <p class="lead">Choisissez le sujet de votre message : il arrive directement à la bonne personne, et nous vous répondons par e-mail, en général sous 48 heures.</p>
+    <div class="rubriques">
+      <div><strong>Question avant achat</strong>Prix, configuration requise, home trainers compatibles, date de sortie.</div>
+      <div><strong>Problème technique</strong>Installation, home trainer, Bluetooth, montre, plantage.</div>
+      <div><strong>Abonnement / paiement</strong>Clé MVO, deuxième PC, résiliation, facture.</div>
+      <div><strong>Idée ou retour de test</strong>Un parcours à ajouter, une amélioration, un défaut visuel.</div>
+    </div>
+
+    <form class="contact" id="contact-form" novalidate>
+      <label class="full">Sujet de votre message
+        <select name="rubrique" required>
+          <option value="avant_achat">Question avant achat</option>
+          <option value="technique">Problème technique</option>
+          <option value="abonnement">Abonnement / paiement</option>
+          <option value="idee">Idée ou retour de test</option>
+        </select>
+      </label>
+      <label>Votre nom
+        <input name="nom" autocomplete="name" maxlength="80" required>
+      </label>
+      <label>Votre adresse e-mail
+        <input name="email" type="email" autocomplete="email" maxlength="160" required>
+      </label>
+      <label class="full">Objet
+        <input name="sujet" maxlength="160" placeholder="En quelques mots">
+      </label>
+      <fieldset class="full" id="tech" hidden>
+        <legend>Pour vous aider plus vite (facultatif)</legend>
+        <label>Version du jeu<input name="version" maxlength="40" placeholder="ex. 0.9.44 (en bas de l'écran d'accueil)"></label>
+        <label>Home trainer<input name="trainer" maxlength="80" placeholder="marque et modèle"></label>
+        <label>Cardio<input name="cardio" maxlength="80" placeholder="ceinture ou montre"></label>
+        <label>Windows<input name="windows" maxlength="40" placeholder="10 ou 11"></label>
+      </fieldset>
+      <label class="full">Votre message
+        <textarea name="message" maxlength="4000" required></textarea>
+      </label>
+      <div class="trap" aria-hidden="true"><label>Ne pas remplir<input name="site" tabindex="-1" autocomplete="off"></label></div>
+      <p class="full" style="color: var(--muted); font-size: 14px; margin: 0">Votre nom, votre e-mail et votre message servent uniquement à vous répondre ; ils sont effacés au bout de 12 mois. Voir la <a href="confidentialite.html">politique de confidentialité</a>.</p>
+      <button type="submit" class="btn">Envoyer</button>
+      <p class="full form-status" id="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Mont Ventoux Online<br>Données : © OpenStreetMap contributors (ODbL), relief et photographies aériennes © IGN (Licence ouverte).</div>
+    <div><a href="contact.html">Contact</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+  </div>
+</footer>
+<script src="js/site.js?v=1"></script>
+</body>
+</html>
