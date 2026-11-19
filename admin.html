@@ -4,38 +4,70 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Tableau de bord — Mont Ventoux Online</title>
+  <title>Pilotage — Mont Ventoux Online</title>
   <link rel="icon" type="image/png" href="img/icone.png">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
   <style>
-    .admin { padding: 40px 0 80px; }
-    .admin .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
-    .admin input, .admin select { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
-    .admin button { font: inherit; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer; }
+    .admin { padding: 32px 0 80px; }
+    .admin h2 { margin-bottom: 4px; }
+    .admin .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+    .admin input, .admin select, .admin textarea { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+    .admin button { font: inherit; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
     .admin button.ghost { background: var(--bg-3); }
-    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 10px 0 24px; }
+    .admin button.small { padding: 5px 12px; font-size: 14px; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 22px; border-bottom: 1px solid var(--line); }
+    .tabs button { background: none; color: var(--muted); border-radius: 10px 10px 0 0; padding: 10px 14px; }
+    .tabs button.on { color: var(--text); background: var(--bg-2); box-shadow: inset 0 -3px 0 var(--red); }
+    .tabs .badge { background: var(--red); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 12px; margin-left: 6px; }
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 10px 0 22px; }
     .kpis div { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-    .kpis strong { display: block; font-size: 28px; color: var(--red); }
+    .kpis strong { display: block; font-size: 28px; color: var(--text); line-height: 1.1; }
     .kpis span { color: var(--muted); font-size: 13px; }
+    .kpis div.alert { border-color: var(--red); }
+    .kpis div.alert strong { color: #ff8a8d; }
     @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+    .card h3 { margin: 0 0 10px; font-size: 18px; }
+    .muted { color: var(--muted); }
+    .bars { display: flex; align-items: flex-end; gap: 3px; height: 130px; }
+    .bars div { flex: 1; background: var(--red); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
+    .bars div i { position: absolute; left: 0; right: 0; bottom: 0; background: #ffb3b5; border-radius: 3px 3px 0 0; }
+    .axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-top: 4px; }
+    #dueList, #payList, #nextDue { overflow-x: auto; }
+    table.list { width: 100%; min-width: 460px; border-collapse: collapse; font-size: 15px; }
+    table.list th, table.list td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.list th { color: var(--muted); font-weight: 600; font-size: 13px; }
+    table.list td.num, table.list th.num { text-align: right; white-space: nowrap; }
+    tr.late td:first-child { box-shadow: inset 3px 0 0 var(--red); }
+    tr.paid td { color: var(--muted); }
+    .tag { display: inline-block; font-size: 12px; border-radius: 999px; padding: 1px 8px; background: var(--bg-3); color: var(--muted); }
+    .tag.red { background: var(--red); color: #fff; }
     .msg { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
     .msg.unread { border-color: var(--red); }
     .msg header { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
     .msg h3 { margin: 6px 0; font-size: 18px; }
     .msg p { margin: 6px 0; white-space: pre-wrap; }
     .msg .det { color: var(--muted); font-size: 14px; }
-    .bars { display: flex; align-items: flex-end; gap: 3px; height: 120px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
-    .bars div { flex: 1; background: var(--red); border-radius: 3px 3px 0 0; min-height: 2px; }
+    .report { white-space: pre-wrap; background: var(--bg-3); border-radius: 10px; padding: 14px; font-size: 15px; line-height: 1.55; }
+    .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .links a { display: block; background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; color: var(--text); text-decoration: none; }
+    .links a:hover { border-color: var(--red); }
+    .links a span { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+    form.ech { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; }
+    form.ech .wide { grid-column: 1 / -1; }
+    @media (max-width: 720px) { form.ech { grid-template-columns: 1fr 1fr; } }
     .err { color: #ff8a8d; font-weight: 700; }
+    .ok { color: #7ee2a0; font-weight: 700; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
 <section class="admin">
   <div class="wrap">
     <div class="kicker">Mont Ventoux Online</div>
-    <h2>Tableau de bord</h2>
-    <p class="lead">Page privée (non référencée) : joueurs, abonnements et messages du formulaire de contact. Le jeton d'administration reste dans ce navigateur.</p>
-    <div class="row">
+    <h2>Pilotage de l'activité</h2>
+    <p class="muted">Page privée, non référencée. Le jeton d'administration reste dans ce navigateur.</p>
+    <div class="row" id="login">
       <input id="token" type="password" placeholder="Jeton d'administration (ADMIN_TOKEN)" size="40" autocomplete="off">
       <button id="go">Afficher</button>
       <button id="forget" class="ghost">Oublier le jeton</button>
@@ -43,81 +75,319 @@
     </div>
 
     <div id="dash" hidden>
-      <h3>Joueurs</h3>
-      <div class="kpis" id="kpis"></div>
-      <div class="bars" id="bars" title="Joueurs par jour, 30 derniers jours"></div>
-      <p id="subs" style="color: var(--muted)"></p>
-
-      <h3 style="margin-top: 34px">Messages du formulaire</h3>
-      <div class="row">
-        <select id="rub"><option value="">Toutes les rubriques</option><option value="avant_achat">Question avant achat</option>
-          <option value="technique">Problème technique</option><option value="abonnement">Abonnement / paiement</option>
-          <option value="idee">Idée ou retour de test</option></select>
-        <label><input type="checkbox" id="unread"> Non lus seulement</label>
-        <button id="reload" class="ghost">Actualiser</button>
+      <div class="row muted" style="justify-content: space-between">
+        <span id="stamp"></span>
+        <button id="refresh" class="ghost small">Actualiser</button>
       </div>
-      <p id="counts" style="color: var(--muted)"></p>
-      <div id="msgs"></div>
+      <nav class="tabs" id="tabs">
+        <button data-tab="vue" class="on">Vue d'ensemble</button>
+        <button data-tab="rapport">Compte rendu</button>
+        <button data-tab="messages">Messages<span class="badge" id="badge" hidden></span></button>
+        <button data-tab="paiements">Paiements</button>
+        <button data-tab="echeances">À régler</button>
+        <button data-tab="liens">Liens utiles</button>
+      </nav>
+
+      <!-- Vue d'ensemble -->
+      <div data-panel="vue">
+        <div class="kpis" id="kpis"></div>
+        <div class="card">
+          <h3>Joueurs par jour <span class="muted" style="font-size: 14px">(30 derniers jours ; en clair : abonnés)</span></h3>
+          <div class="bars" id="bars"></div>
+          <div class="axis" id="axis"></div>
+        </div>
+        <div class="card"><h3>Abonnements et versions du jeu</h3><p id="subs" class="muted"></p></div>
+        <div class="card"><h3>Prochaines échéances</h3><div id="nextDue"></div></div>
+      </div>
+
+      <!-- Compte rendu -->
+      <div data-panel="rapport" hidden>
+        <div class="card">
+          <div class="row" style="justify-content: space-between"><h3 style="margin: 0">Compte rendu</h3>
+            <button id="copy" class="ghost small">Copier le texte</button></div>
+          <div class="report" id="report"></div>
+          <p class="muted" style="font-size: 14px">À coller dans un courriel, un carnet de bord ou à envoyer à un associé.</p>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div data-panel="messages" hidden>
+        <div class="row">
+          <select id="rub"><option value="">Toutes les rubriques</option><option value="avant_achat">Question avant achat</option>
+            <option value="technique">Problème technique</option><option value="abonnement">Abonnement / paiement</option>
+            <option value="idee">Idée ou retour de test</option></select>
+          <label><input type="checkbox" id="unread"> Non lus seulement</label>
+        </div>
+        <p id="counts" class="muted"></p>
+        <div id="msgs"></div>
+        <p class="muted" style="font-size: 14px">Messages du formulaire de contact du site (gardés 12 mois). Le bouton « Répondre » ouvre ta messagerie.
+          Les courriels envoyés directement à contact@montventouxonline.fr arrivent, eux, dans ta messagerie (voir « Liens utiles »).</p>
+      </div>
+
+      <!-- Paiements -->
+      <div data-panel="paiements" hidden>
+        <div class="kpis" id="payKpis"></div>
+        <div class="card"><h3>Derniers paiements (30 jours)</h3><div id="payList"></div>
+          <p class="muted" style="font-size: 14px">Avec Stripe Managed Payments, Stripe/Link est le revendeur : il encaisse, reverse la TVA et te verse le net.
+            Les factures des clients et tes relevés sont dans le tableau de bord Stripe.</p></div>
+      </div>
+
+      <!-- Échéances -->
+      <div data-panel="echeances" hidden>
+        <div class="card"><h3>Ce que tu as à régler</h3><div id="dueList"></div></div>
+        <div class="card">
+          <h3 id="formTitle">Ajouter une échéance</h3>
+          <form class="ech" id="dueForm">
+            <input type="hidden" name="id">
+            <input name="libelle" placeholder="Libellé (ex. : nom de domaine)" required>
+            <input name="montant" type="number" step="0.01" min="0" placeholder="Montant (€)">
+            <input name="echeance" type="date" title="Date d'échéance">
+            <select name="recurrence"><option value="aucune">Une seule fois</option><option value="mensuelle">Chaque mois</option>
+              <option value="annuelle">Chaque année</option><option value="triennale">Tous les 3 ans</option></select>
+            <input name="fournisseur" placeholder="Fournisseur (ex. : OVHcloud)">
+            <input name="paye_le" type="date" title="Payée le (vide : à payer)">
+            <input name="note" class="wide" placeholder="Note (référence, où payer…)">
+            <div class="row wide" style="margin: 0"><button type="submit">Enregistrer</button>
+              <button type="button" class="ghost" id="cancelEdit" hidden>Annuler</button><span id="formState"></span></div>
+          </form>
+          <p class="muted" style="font-size: 14px">Une échéance récurrente marquée « payée » crée d'elle-même la suivante.</p>
+        </div>
+      </div>
+
+      <!-- Liens utiles -->
+      <div data-panel="liens" hidden>
+        <div class="links">
+          <a href="https://dashboard.stripe.com/" target="_blank" rel="noopener">Stripe<span>Paiements, abonnés, versements, factures</span></a>
+          <a href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Messagerie OVHcloud<span>Boîte contact@montventouxonline.fr</span></a>
+          <a href="https://www.ovh.com/manager/" target="_blank" rel="noopener">OVHcloud<span>Nom de domaine, DNS, factures OVH</span></a>
+          <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console<span>Référencement, recherches, pages indexées</span></a>
+          <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener">Cloudflare<span>Serveur d'abonnement et de contact</span></a>
+          <a href="https://github.com/Eccco-13" target="_blank" rel="noopener">GitHub<span>Code du jeu, site, installeurs</span></a>
+          <a href="https://www.cm2c.net/" target="_blank" rel="noopener">CM2C<span>Médiateur de la consommation (espace adhérent)</span></a>
+          <a href="https://www.strava.com/clubs/1096717" target="_blank" rel="noopener">Club Strava<span>Mont Ventoux Online</span></a>
+          <a href="index.html" target="_blank" rel="noopener">Le site<span>montventouxonline.fr</span></a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 <script>
 (function () {
-  var API = "https://mvo-abonnement.montventouxonline.workers.dev";
+  // Essai en local (python -m http.server + wrangler dev) : serveur local ; sinon le vrai.
+  var API = location.hostname === "localhost" ? "http://localhost:8787" : "https://mvo-abonnement.montventouxonline.workers.dev";
   var LABEL = { avant_achat: "Question avant achat", technique: "Problème technique", abonnement: "Abonnement / paiement", idee: "Idée ou retour de test" };
+  var REC = { aucune: "une fois", mensuelle: "chaque mois", annuelle: "chaque année", triennale: "tous les 3 ans" };
+  var STATUT = { active: "actifs", trialing: "en essai", past_due: "paiement en retard", canceled: "résiliés", unpaid: "impayés", incomplete: "incomplets", paused: "en pause" };
   var $ = function (id) { return document.getElementById(id); };
-  var token = "";
+  var token = "", data = null;
   try { token = localStorage.getItem("mvo_admin") || ""; } catch (e) {}
   $("token").value = token;
   var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var eur = function (n) { return n == null ? "—" : Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" }); };
+  var dateFr = function (d) { return d ? new Date(d.length === 10 ? d + "T12:00:00" : d).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" }) : "—"; };
+  var today = function () { return new Date().toISOString().slice(0, 10); };
+  var daysTo = function (d) { return Math.round((new Date(d + "T12:00:00") - new Date(today() + "T12:00:00")) / 86400000); };
+
   function call(path, opts) {
     opts = opts || {};
     opts.headers = Object.assign({ Authorization: "Bearer " + token }, opts.headers || {});
     return fetch(API + path, opts).then(function (r) {
       if (r.status === 401) throw new Error("Jeton refusé");
+      if (!r.ok) throw new Error("Serveur indisponible (" + r.status + ")");
       return r.json();
     });
   }
-  function stats() {
-    return call("/v1/stats").then(function (s) {
-      $("kpis").innerHTML = [["Aujourd'hui", s.joueurs_aujourdhui], ["7 jours", s.joueurs_7_jours], ["30 jours", s.joueurs_30_jours], ["Ordinateurs", s.appareils_total]]
-        .map(function (k) { return '<div><strong>' + k[1] + '</strong><span>' + k[0] + '</span></div>'; }).join("");
-      var max = Math.max.apply(null, s.par_jour.map(function (d) { return d.joueurs; }).concat([1]));
-      $("bars").innerHTML = s.par_jour.map(function (d) {
-        return '<div style="height:' + (d.joueurs / max * 100).toFixed(0) + '%" title="' + d.jour + ' : ' + d.joueurs + ' joueurs, ' + (d.abonnes || 0) + ' abonnés"></div>';
-      }).join("");
-      $("subs").textContent = "Abonnements : " + (s.abonnements.map(function (a) { return a.statut + (a.test ? " (test)" : "") + " " + a.n; }).join(" · ") || "aucun") +
-        " — Versions (30 j) : " + (s.versions.map(function (v) { return (v.version || "?") + " × " + v.n; }).join(", ") || "—");
-    });
+  var post = function (path, body) { return call(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); };
+  // Accord du nombre : pl(1, "message") → « 1 message », pl(3, "message") → « 3 messages ».
+  var pl = function (n, mot, pluriel) { return n + " " + (n > 1 ? (pluriel || mot.replace(/(\S+)/g, "$1s")) : mot); };
+  var kpi = function (label, value, alert) { return '<div' + (alert ? ' class="alert"' : "") + '><strong>' + value + "</strong><span>" + label + "</span></div>"; };
+
+  // ---------- Vue d'ensemble ----------
+  function renderOverview() {
+    var j = data.joueurs, a = data.abonnements, p = data.paiements, m = data.messages;
+    var due = pendingDue();
+    var late = due.filter(function (e) { return e.echeance && daysTo(e.echeance) < 0; }).length;
+    $("kpis").innerHTML = [
+      kpi("Joueurs aujourd'hui", j.aujourdhui), kpi("Joueurs sur 7 jours", j.j7), kpi("Joueurs sur 30 jours", j.j30), kpi("Nouveaux PC (7 jours)", j.nouveaux_7),
+      kpi("Abonnés actifs", a.actifs), kpi("Encaissé ce mois-ci" + (p.disponible && p.mode === "test" ? " (test)" : ""), p.disponible ? eur(p.mois.total) : "—"),
+      kpi("Messages non lus", m.non_lus, m.non_lus > 0), kpi(late ? "Échéances en retard" : "Échéances à venir", late || due.length, late > 0),
+    ].join("");
+    var days = [], byDay = {};
+    j.par_jour.forEach(function (d) { byDay[d.jour] = d; });
+    for (var i = 29; i >= 0; i--) days.push(new Date(Date.now() - i * 86400000).toISOString().slice(0, 10));
+    var max = Math.max.apply(null, days.map(function (d) { return byDay[d] ? byDay[d].joueurs : 0; }).concat([1]));
+    $("bars").innerHTML = days.map(function (d) {
+      var x = byDay[d] || { joueurs: 0, abonnes: 0 };
+      var h = (x.joueurs / max * 100).toFixed(0), sub = x.joueurs ? ((x.abonnes || 0) / x.joueurs * 100).toFixed(0) : 0;
+      return '<div style="height:' + h + '%" title="' + dateFr(d) + " : " + x.joueurs + " joueurs, " + (x.abonnes || 0) + ' abonnés"><i style="height:' + sub + '%"></i></div>';
+    }).join("");
+    $("axis").innerHTML = "<span>" + dateFr(days[0]) + "</span><span>aujourd'hui</span>";
+    var st = a.par_statut.map(function (s) { return s.n + " " + (STATUT[s.statut] || s.statut) + (s.test ? " (test)" : ""); }).join(" · ") || "aucun abonnement pour l'instant";
+    var ver = j.versions.map(function (v) { return (v.version || "?") + " : " + v.n; }).join(" · ") || "—";
+    $("subs").innerHTML = "Abonnements : " + esc(st) + "<br>Renouvellements dans les 7 jours : " + a.renouvellements_7 +
+      " · Paiements en retard : " + a.impayes + " · Résiliations (30 jours) : " + a.resiliations_30 +
+      "<br>Ordinateurs connus : " + j.ordinateurs + " · Versions du jeu (30 jours) : " + esc(ver);
+    $("nextDue").innerHTML = due.length ? dueTable(due.slice(0, 4), false) : '<p class="muted">Rien à régler.</p>';
+    var b = $("badge"); b.hidden = !m.non_lus; b.textContent = m.non_lus;
   }
-  function messages() {
+
+  // ---------- Compte rendu ----------
+  function renderReport() {
+    var j = data.joueurs, a = data.abonnements, p = data.paiements, m = data.messages;
+    var rub = m.par_rubrique_7.map(function (r) { return r.n + " " + (LABEL[r.rubrique] || r.rubrique).toLowerCase(); }).join(", ");
+    var due = pendingDue();
+    var lines = [
+      "Mont Ventoux Online — compte rendu du " + dateFr(data.le),
+      "",
+      "JOUEURS",
+      "• " + pl(j.j7, "joueur") + " ces 7 derniers jours (" + j.aujourdhui + " aujourd'hui), " + j.j30 + " sur 30 jours.",
+      "• " + pl(j.nouveaux_7, "nouvel ordinateur", "nouveaux ordinateurs") + " cette semaine, " + j.nouveaux_30 + " sur 30 jours.",
+      "",
+      "ABONNEMENTS",
+      "• " + pl(a.actifs, "abonné actif") + " ; " + pl(a.renouvellements_7, "renouvellement prévu") + " dans les 7 jours.",
+      "• " + pl(a.resiliations_30, "résiliation") + " sur 30 jours ; " + pl(a.impayes, "paiement en retard", "paiements en retard") + ".",
+      "",
+      "ENCAISSEMENTS" + (p.disponible && p.mode === "test" ? " (Stripe en mode test : montants fictifs)" : ""),
+      p.disponible ? "• Ce mois-ci : " + eur(p.mois.total) + " (" + p.mois.nombre + " paiements, dont " + p.mois.premiers + " premiers abonnements)." : "• " + (p.erreur || "Stripe n'est pas relié au serveur."),
+      p.disponible ? "• 30 derniers jours : " + eur(p.j30.total) + " (" + p.j30.nombre + " paiements). Solde Stripe : " + eur(p.solde.disponible) + " disponible, " + eur(p.solde.en_attente) + " en attente." : "",
+      "",
+      "MESSAGES",
+      "• " + pl(m.j7, "message reçu", "messages reçus") + " cette semaine" + (rub ? " (" + rub + ")" : "") + " ; " + m.non_lus + " non lus au total.",
+      "",
+      "À RÉGLER",
+    ];
+    if (!due.length) lines.push("• Rien.");
+    due.slice(0, 6).forEach(function (e) {
+      lines.push("• " + e.libelle + " — " + (e.montant != null ? eur(e.montant) : "montant à compléter") + " — " +
+        (e.echeance ? "le " + dateFr(e.echeance) + (daysTo(e.echeance) < 0 ? " (EN RETARD)" : "") : "date à compléter") + (e.fournisseur ? " (" + e.fournisseur + ")" : ""));
+    });
+    $("report").textContent = lines.filter(function (l, i, arr) { return l !== "" || arr[i - 1] !== ""; }).join("\n");
+  }
+
+  // ---------- Messages ----------
+  function loadMessages() {
     var q = "?" + ($("rub").value ? "rubrique=" + $("rub").value + "&" : "") + ($("unread").checked ? "non_lus=1" : "");
     return call("/v1/admin/messages" + q).then(function (r) {
       $("counts").textContent = r.par_rubrique.map(function (x) { return (LABEL[x.rubrique] || x.rubrique) + " : " + x.n + " (" + x.non_lus + " non lus)"; }).join(" · ") || "Aucun message pour l'instant.";
       $("msgs").innerHTML = r.messages.map(function (m) {
-        return '<article class="msg' + (m.lu ? "" : " unread") + '"><header><span>' + esc(LABEL[m.rubrique] || m.rubrique) + " · " + esc(m.recu_le.replace("T", " ").slice(0, 16)) +
-          " · " + esc(m.langue || "fr") + '</span><span><a href="mailto:' + esc(m.email) + "?subject=" + encodeURIComponent("Re : " + m.sujet) + '">' + esc(m.nom) + " &lt;" + esc(m.email) + "&gt;</a></span></header>" +
+        var mail = "mailto:" + esc(m.email) + "?subject=" + encodeURIComponent("Re : " + m.sujet);
+        return '<article class="msg' + (m.lu ? "" : " unread") + '"><header><span>' + esc(LABEL[m.rubrique] || m.rubrique) + " · " + esc(dateFr(m.recu_le)) + " " + esc(m.recu_le.slice(11, 16)) +
+          " · " + esc((m.langue || "fr").toUpperCase()) + "</span><span>" + esc(m.nom) + " &lt;" + esc(m.email) + "&gt;</span></header>" +
           "<h3>" + esc(m.sujet) + "</h3><p>" + esc(m.message) + "</p>" + (m.details ? '<p class="det">' + esc(m.details) + "</p>" : "") +
-          '<button class="ghost" data-id="' + m.id + '" data-lu="' + (m.lu ? 0 : 1) + '">' + (m.lu ? "Marquer non lu" : "Marquer lu") + "</button></article>";
+          '<div class="row" style="margin: 8px 0 0"><a class="tag red" href="' + mail + '" data-reply="' + m.id + '">Répondre</a>' +
+          '<button class="ghost small" data-id="' + m.id + '" data-lu="' + (m.lu ? 0 : 1) + '">' + (m.lu ? "Marquer non lu" : "Marquer lu") + "</button></div></article>";
       }).join("");
     });
   }
+
+  // ---------- Paiements ----------
+  function renderPayments() {
+    var p = data.paiements;
+    if (!p.disponible) {
+      $("payKpis").innerHTML = "";
+      $("payList").innerHTML = '<p class="muted">' + esc(p.erreur || "Stripe n'est pas relié au serveur.") + "</p>";
+      return;
+    }
+    $("payKpis").innerHTML = [
+      kpi("Encaissé ce mois-ci", eur(p.mois.total)), kpi("Paiements ce mois-ci", p.mois.nombre),
+      kpi("Encaissé sur 30 jours", eur(p.j30.total)), kpi("Solde Stripe disponible", eur(p.solde.disponible)),
+    ].join("") + (p.mode === "test" ? '<div style="grid-column: 1 / -1; padding: 10px 14px"><span class="tag red">Mode test</span> <span class="muted">montants fictifs : Stripe n\'est pas encore en production.</span></div>' : "");
+    $("payList").innerHTML = p.dernieres.length ? '<table class="list"><tr><th>Date</th><th>Facture</th><th>Type</th><th class="num">Montant</th></tr>' +
+      p.dernieres.map(function (f) {
+        var type = f.motif === "subscription_create" ? "Nouvel abonnement" : f.motif === "subscription_cycle" ? "Renouvellement" : (f.motif || "—");
+        return "<tr><td>" + esc(dateFr(f.le)) + "</td><td>" + esc(f.numero || "—") + "</td><td>" + esc(type) + '</td><td class="num">' + esc(eur(f.montant)) + "</td></tr>";
+      }).join("") + "</table>" : '<p class="muted">Aucun paiement sur les 30 derniers jours.</p>';
+  }
+
+  // ---------- Échéances ----------
+  function pendingDue() { return (data.echeances || []).filter(function (e) { return !e.paye_le; }); }
+  function dueTable(list, actions) {
+    return '<table class="list"><tr><th>À régler</th><th>Échéance</th><th class="num">Montant</th>' + (actions ? "<th></th>" : "") + "</tr>" +
+      list.map(function (e) {
+        var d = e.echeance ? daysTo(e.echeance) : null;
+        var when = e.paye_le ? "payée le " + dateFr(e.paye_le) : !e.echeance ? '<span class="tag">date à compléter</span>' :
+          dateFr(e.echeance) + " " + (d < 0 ? '<span class="tag red">en retard</span>' : d <= 30 ? '<span class="tag red">dans ' + d + " j</span>" : "");
+        return '<tr class="' + (e.paye_le ? "paid" : d != null && d < 0 ? "late" : "") + '"><td><strong>' + esc(e.libelle) + "</strong><br><span class=\"muted\" style=\"font-size:13px\">" +
+          esc([e.fournisseur, REC[e.recurrence], e.note].filter(Boolean).join(" · ")) + "</span></td><td>" + when + '</td><td class="num">' + esc(eur(e.montant)) + "</td>" +
+          (actions ? '<td class="num">' + (e.paye_le ? "" : '<button class="small" data-pay="' + e.id + '">Payée</button> ') +
+            '<button class="ghost small" data-edit="' + e.id + '">Modifier</button> <button class="ghost small" data-del="' + e.id + '">×</button></td>' : "") + "</tr>";
+      }).join("") + "</table>";
+  }
+  function renderDue() {
+    var list = data.echeances || [];
+    $("dueList").innerHTML = list.length ? dueTable(list, true) : '<p class="muted">Aucune échéance enregistrée.</p>';
+  }
+  function setDue(list) { data.echeances = list; renderDue(); renderOverview(); renderReport(); }
+  function fillForm(e) {
+    var f = $("dueForm");
+    ["id", "libelle", "montant", "echeance", "recurrence", "fournisseur", "paye_le", "note"].forEach(function (k) { f.elements[k].value = e && e[k] != null ? e[k] : (k === "recurrence" ? "aucune" : ""); });
+    $("formTitle").textContent = e ? "Modifier l'échéance" : "Ajouter une échéance";
+    $("cancelEdit").hidden = !e;
+  }
+
+  // ---------- Chargement ----------
   function load() {
     token = $("token").value.trim();
     try { localStorage.setItem("mvo_admin", token); } catch (e) {}
     $("state").textContent = "Chargement…"; $("state").className = "";
-    Promise.all([stats(), messages()]).then(function () { $("dash").hidden = false; $("state").textContent = ""; })
-      .catch(function (e) { $("dash").hidden = true; $("state").textContent = e.message || "Erreur"; $("state").className = "err"; });
+    Promise.all([call("/v1/admin/tableau"), loadMessages()]).then(function (r) {
+      data = r[0];
+      renderOverview(); renderReport(); renderPayments(); renderDue();
+      $("stamp").textContent = "Mis à jour le " + new Date(data.le).toLocaleString("fr-FR");
+      $("dash").hidden = false; $("login").hidden = true; $("state").textContent = "";
+    }).catch(function (e) { $("dash").hidden = true; $("login").hidden = false; $("state").textContent = e.message || "Erreur"; $("state").className = "err"; });
   }
   $("go").addEventListener("click", load);
-  $("reload").addEventListener("click", messages);
-  $("rub").addEventListener("change", messages);
-  $("unread").addEventListener("change", messages);
+  $("token").addEventListener("keydown", function (e) { if (e.key === "Enter") load(); });
+  $("refresh").addEventListener("click", load);
   $("forget").addEventListener("click", function () { try { localStorage.removeItem("mvo_admin"); } catch (e) {} $("token").value = ""; $("dash").hidden = true; });
+  $("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-tab]"); if (!b) return;
+    Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (x) { x.classList.toggle("on", x === b); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-panel]"), function (p) { p.hidden = p.getAttribute("data-panel") !== b.getAttribute("data-tab"); });
+    try { localStorage.setItem("mvo_admin_tab", b.getAttribute("data-tab")); } catch (err) {}
+  });
+  try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
+  $("rub").addEventListener("change", loadMessages);
+  $("unread").addEventListener("change", loadMessages);
   $("msgs").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-id]");
-    if (!b) return;
-    call("/v1/admin/lu", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: +b.getAttribute("data-id"), lu: b.getAttribute("data-lu") === "1" }) }).then(messages);
+    var reply = e.target.closest("a[data-reply]");
+    // Répondre : le message passe en « lu » (la messagerie s'ouvre quand même).
+    var id = b ? +b.getAttribute("data-id") : reply ? +reply.getAttribute("data-reply") : null;
+    if (id == null) return;
+    var lu = b ? b.getAttribute("data-lu") === "1" : true;
+    post("/v1/admin/lu", { id: id, lu: lu }).then(function () { return Promise.all([loadMessages(), call("/v1/admin/tableau")]); })
+      .then(function (r) { data = r[1]; renderOverview(); renderReport(); });
+  });
+  $("copy").addEventListener("click", function () {
+    var txt = $("report").textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { $("copy").textContent = "Copié ✓"; },
+      function () { $("copy").textContent = "Sélectionne le texte"; });
+    setTimeout(function () { $("copy").textContent = "Copier le texte"; }, 2000);
+  });
+  $("dueForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, body = {};
+    ["id", "libelle", "montant", "echeance", "recurrence", "fournisseur", "paye_le", "note"].forEach(function (k) { body[k] = f.elements[k].value; });
+    $("formState").textContent = "Enregistrement…"; $("formState").className = "";
+    post("/v1/admin/echeances", body).then(function (r) {
+      if (!r.ok) throw new Error("Vérifie le libellé et le montant");
+      setDue(r.echeances); fillForm(null); $("formState").textContent = "Enregistré"; $("formState").className = "ok";
+    }).catch(function (err) { $("formState").textContent = err.message; $("formState").className = "err"; });
+  });
+  $("cancelEdit").addEventListener("click", function () { fillForm(null); });
+  $("dueList").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var find = function (id) { return (data.echeances || []).filter(function (x) { return x.id === +id; })[0]; };
+    if (b.hasAttribute("data-edit")) { fillForm(find(b.getAttribute("data-edit"))); $("dueForm").scrollIntoView({ behavior: "smooth" }); }
+    if (b.hasAttribute("data-pay")) {
+      var x = Object.assign({}, find(b.getAttribute("data-pay")), { paye_le: today() });
+      post("/v1/admin/echeances", x).then(function (r) { setDue(r.echeances); });
+    }
+    if (b.hasAttribute("data-del") && confirm("Supprimer cette échéance ?")) {
+      post("/v1/admin/echeances/supprimer", { id: +b.getAttribute("data-del") }).then(function (r) { setDue(r.echeances); });
+    }
   });
   if (token) load();
 })();
