@@ -137,8 +137,8 @@
             <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
         </div>
         <div id="box"></div>
-        <p class="muted" style="font-size: 14px">Les 40 derniers courriels reçus sur contact@montventouxonline.fr, lus directement dans ta boîte OVHcloud, en lecture seule :
-          rien n'y est modifié ni effacé, et un courriel ouvert ici reste « non lu » dans ta messagerie. « Répondre » ouvre ta messagerie.</p>
+        <p class="muted" style="font-size: 14px">Les 40 derniers courriels reçus sur contact@montventouxonline.fr, lus directement dans ta boîte OVHcloud.
+          Un courriel ouvert ici reste « non lu » dans ta messagerie. « Supprimer » le met à la corbeille de ta messagerie (récupérable), « Répondre » ouvre ta messagerie.</p>
       </div>
 
       <!-- Paiements -->
@@ -312,7 +312,8 @@
       var b = $("badgeBox"); b.hidden = !unread; b.textContent = unread;
       $("box").innerHTML = boxMails.length ? boxMails.map(function (m) {
         return '<article class="msg mail' + (m.lu ? "" : " unread") + '" data-uid="' + m.uid + '"><header><span>' + esc(m.de) + "</span><span>" + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) +
-          (m.repondu ? ' · <span class="tag">répondu</span>' : "") + "</span></header><h3>" + esc(m.objet) + '</h3><div class="slot"></div></article>';
+          (m.repondu ? ' · <span class="tag">répondu</span>' : "") + ' <button class="ghost small" data-trash="' + m.uid + '" title="Mettre à la corbeille de la messagerie">Supprimer</button>' +
+          "</span></header><h3>" + esc(m.objet) + '</h3><div class="slot"></div></article>';
       }).join("") : '<p class="muted">La boîte de réception est vide.</p>';
     }).catch(function (e) { $("boxState").textContent = e.message || "Erreur"; $("boxState").className = "err"; });
   }
@@ -412,6 +413,22 @@
     }).catch(function (e) { $("boxState").textContent = e.message; $("boxState").className = "err"; });
   });
   $("box").addEventListener("click", function (e) {
+    var del = e.target.closest("button[data-trash]");
+    if (del) {
+      var card = del.closest("article");
+      var titre = card.querySelector("h3").textContent;
+      if (!confirm("Mettre ce courriel à la corbeille ?\n\n« " + titre + " »\n\nIl reste récupérable dans la corbeille de ta messagerie OVHcloud.")) return;
+      del.disabled = true; del.textContent = "…";
+      post("/v1/admin/courriels/corbeille", { uids: [+del.getAttribute("data-trash")] }).then(function (r) {
+        if (!r.ok) throw new Error(r.erreur || "Suppression impossible");
+        card.remove();
+        boxMails = boxMails.filter(function (m) { return m.uid !== +del.getAttribute("data-trash"); });
+        var unread = boxMails.filter(function (m) { return !m.lu; }).length;
+        var b = $("badgeBox"); b.hidden = !unread; b.textContent = unread;
+        $("boxState").textContent = "Courriel mis à la corbeille (" + (r.corbeille || "Corbeille") + ")."; $("boxState").className = "ok";
+      }).catch(function (err) { del.disabled = false; del.textContent = "Supprimer"; $("boxState").textContent = err.message; $("boxState").className = "err"; });
+      return;
+    }
     if (e.target.closest("a")) return;
     var card = e.target.closest("article[data-uid]"); if (card) openMail(card);
   });
