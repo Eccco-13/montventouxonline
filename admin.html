@@ -133,6 +133,7 @@
         <div class="row" style="justify-content: space-between">
           <span id="boxState" class="muted"></span>
           <span><button id="boxRefresh" class="ghost small">Relever la boîte</button>
+            <button id="mailTest" class="ghost small" title="Envoie à contact@ l'exemple du courriel reçu par un nouvel abonné">Courriel de confirmation d'essai</button>
             <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
         </div>
         <div id="box"></div>
@@ -403,6 +404,13 @@
   try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
   $("rub").addEventListener("change", loadMessages);
   $("boxRefresh").addEventListener("click", loadBox);
+  $("mailTest").addEventListener("click", function () {
+    $("boxState").textContent = "Envoi du courriel d'essai à contact@…"; $("boxState").className = "muted";
+    post("/v1/admin/confirmation-essai", {}).then(function (r) {
+      $("boxState").textContent = r.envoye ? "Courriel d'essai envoyé à contact@ : relève la boîte dans quelques secondes." : (r.raison || "Envoi impossible");
+      $("boxState").className = r.envoye ? "ok" : "err";
+    }).catch(function (e) { $("boxState").textContent = e.message; $("boxState").className = "err"; });
+  });
   $("box").addEventListener("click", function (e) {
     if (e.target.closest("a")) return;
     var card = e.target.closest("article[data-uid]"); if (card) openMail(card);
