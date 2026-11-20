@@ -48,6 +48,9 @@
     .msg h3 { margin: 6px 0; font-size: 18px; }
     .msg p { margin: 6px 0; white-space: pre-wrap; }
     .msg .det { color: var(--muted); font-size: 14px; }
+    .msg.mail { cursor: pointer; }
+    .msg.mail h3 { font-size: 17px; }
+    .msg .body { white-space: pre-wrap; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
     .report { white-space: pre-wrap; background: var(--bg-3); border-radius: 10px; padding: 14px; font-size: 15px; line-height: 1.55; }
     .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
     .links a { display: block; background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; color: var(--text); text-decoration: none; }
@@ -82,7 +85,8 @@
       <nav class="tabs" id="tabs">
         <button data-tab="vue" class="on">Vue d'ensemble</button>
         <button data-tab="rapport">Compte rendu</button>
-        <button data-tab="messages">Messages<span class="badge" id="badge" hidden></span></button>
+        <button data-tab="messages">Formulaire<span class="badge" id="badge" hidden></span></button>
+        <button data-tab="boite">Boîte contact@<span class="badge" id="badgeBox" hidden></span></button>
         <button data-tab="paiements">Paiements</button>
         <button data-tab="echeances">À régler</button>
         <button data-tab="liens">Liens utiles</button>
@@ -121,7 +125,19 @@
         <p id="counts" class="muted"></p>
         <div id="msgs"></div>
         <p class="muted" style="font-size: 14px">Messages du formulaire de contact du site (gardés 12 mois). Le bouton « Répondre » ouvre ta messagerie.
-          Les courriels envoyés directement à contact@montventouxonline.fr arrivent, eux, dans ta messagerie (voir « Liens utiles »).</p>
+          Les courriels envoyés directement à contact@montventouxonline.fr sont dans l'onglet « Boîte contact@ ».</p>
+      </div>
+
+      <!-- Boîte contact@ (OVHcloud) -->
+      <div data-panel="boite" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span id="boxState" class="muted"></span>
+          <span><button id="boxRefresh" class="ghost small">Relever la boîte</button>
+            <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
+        </div>
+        <div id="box"></div>
+        <p class="muted" style="font-size: 14px">Les 40 derniers courriels reçus sur contact@montventouxonline.fr, lus directement dans ta boîte OVHcloud, en lecture seule :
+          rien n'y est modifié ni effacé, et un courriel ouvert ici reste « non lu » dans ta messagerie. « Répondre » ouvre ta messagerie.</p>
       </div>
 
       <!-- Paiements -->
@@ -280,6 +296,40 @@
     });
   }
 
+  // ---------- Boîte contact@ (OVHcloud, lecture seule) ----------
+  var boxLoaded = false, boxMails = [];
+  var timeFr = function (d) { return d ? new Date(d).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : ""; };
+  var addr = function (t) { var m = /<([^>]+)>/.exec(t || ""); return m ? m[1] : (t || "").trim(); };
+  function loadBox() {
+    $("boxState").textContent = "Relève de la boîte…"; $("boxState").className = "muted";
+    return call("/v1/admin/courriels").then(function (r) {
+      boxLoaded = true;
+      if (!r.disponible) { $("box").innerHTML = ""; $("boxState").textContent = r.erreur || "Boîte indisponible"; $("boxState").className = "err"; return; }
+      boxMails = r.courriels || [];
+      var unread = boxMails.filter(function (m) { return !m.lu; }).length;
+      $("boxState").textContent = pl(r.total, "courriel") + " dans la boîte de réception · " + pl(unread, "non lu") + " parmi les " + boxMails.length + " derniers · relevée à " + timeFr(new Date().toISOString());
+      var b = $("badgeBox"); b.hidden = !unread; b.textContent = unread;
+      $("box").innerHTML = boxMails.length ? boxMails.map(function (m) {
+        return '<article class="msg mail' + (m.lu ? "" : " unread") + '" data-uid="' + m.uid + '"><header><span>' + esc(m.de) + "</span><span>" + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) +
+          (m.repondu ? ' · <span class="tag">répondu</span>' : "") + "</span></header><h3>" + esc(m.objet) + '</h3><div class="slot"></div></article>';
+      }).join("") : '<p class="muted">La boîte de réception est vide.</p>';
+    }).catch(function (e) { $("boxState").textContent = e.message || "Erreur"; $("boxState").className = "err"; });
+  }
+  function openMail(card) {
+    var slot = card.querySelector(".slot");
+    if (slot.innerHTML) { slot.innerHTML = ""; return; }
+    slot.innerHTML = '<p class="muted">Ouverture…</p>';
+    call("/v1/admin/courriels?uid=" + card.getAttribute("data-uid")).then(function (r) {
+      var c = r.courriel;
+      if (!c) { slot.innerHTML = '<p class="err">' + esc(r.erreur || "Courriel introuvable") + "</p>"; return; }
+      if (c.trop_gros) { slot.innerHTML = '<p class="muted">Courriel trop volumineux pour être affiché ici : ouvre-le dans le webmail.</p>'; return; }
+      var mail = "mailto:" + encodeURIComponent(addr(c.repondre_a)) + "?subject=" + encodeURIComponent(/^re\s*:/i.test(c.objet) ? c.objet : "Re : " + c.objet);
+      slot.innerHTML = '<div class="body">' + esc(c.texte || "(pas de texte)") + "</div>" +
+        (c.pieces && c.pieces.length ? '<p class="det">Pièces jointes : ' + esc(c.pieces.join(", ")) + " (à ouvrir dans le webmail)</p>" : "") +
+        '<div class="row" style="margin: 8px 0 0"><a class="tag red" href="' + mail + '">Répondre</a></div>';
+    }).catch(function (e) { slot.innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
+  }
+
   // ---------- Paiements ----------
   function renderPayments() {
     var p = data.paiements;
@@ -335,6 +385,8 @@
       renderOverview(); renderReport(); renderPayments(); renderDue();
       $("stamp").textContent = "Mis à jour le " + new Date(data.le).toLocaleString("fr-FR");
       $("dash").hidden = false; $("login").hidden = true; $("state").textContent = "";
+      // Boîte relevée à l'ouverture (en arrière-plan : la messagerie peut mettre quelques secondes).
+      loadBox();
     }).catch(function (e) { $("dash").hidden = true; $("login").hidden = false; $("state").textContent = e.message || "Erreur"; $("state").className = "err"; });
   }
   $("go").addEventListener("click", load);
@@ -346,9 +398,15 @@
     Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (x) { x.classList.toggle("on", x === b); });
     Array.prototype.forEach.call(document.querySelectorAll("[data-panel]"), function (p) { p.hidden = p.getAttribute("data-panel") !== b.getAttribute("data-tab"); });
     try { localStorage.setItem("mvo_admin_tab", b.getAttribute("data-tab")); } catch (err) {}
+    if (b.getAttribute("data-tab") === "boite" && !boxLoaded && token && !$("dash").hidden) loadBox();
   });
   try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
   $("rub").addEventListener("change", loadMessages);
+  $("boxRefresh").addEventListener("click", loadBox);
+  $("box").addEventListener("click", function (e) {
+    if (e.target.closest("a")) return;
+    var card = e.target.closest("article[data-uid]"); if (card) openMail(card);
+  });
   $("unread").addEventListener("change", loadMessages);
   $("msgs").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-id]");
