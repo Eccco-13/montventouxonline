@@ -192,6 +192,8 @@ footer a { color: var(--muted); }
 .tag.free { background: rgba(95, 224, 122, 0.18); color: #7ef09a; }
 .tag.paid { background: rgba(255, 210, 63, 0.16); color: #ffd23f; }
 .d1 { color: #5fe07a; } .d2 { color: #f2c418; } .d3 { color: #f27a18; } .d4 { color: #ff5a4e; }
+/* d1…d4 servent aussi de décalage d'animation (.reveal) : pas de couleur de difficulté sur ces blocs. */
+.reveal.d1, .reveal.d2, .reveal.d3, .reveal.d4 { color: inherit; }
 
 /* Progression, tarifs */
 .prog { align-items: center; }
