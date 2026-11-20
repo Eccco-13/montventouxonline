@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Pilotage — Mont Ventoux Online</title>
   <link rel="icon" type="image/png" href="img/icone.png">
-  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="style.css?v=14">
   <style>
     .admin { padding: 32px 0 80px; }
     .admin h2 { margin-bottom: 4px; }
@@ -33,7 +33,7 @@
     .bars div { flex: 1; background: var(--red); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
     .bars div i { position: absolute; left: 0; right: 0; bottom: 0; background: #ffb3b5; border-radius: 3px 3px 0 0; }
     .axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-top: 4px; }
-    #dueList, #payList, #nextDue { overflow-x: auto; }
+    #dueList, #payList, #nextDue, .scroll { overflow-x: auto; }
     table.list { width: 100%; min-width: 460px; border-collapse: collapse; font-size: 15px; }
     table.list th, table.list td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
     table.list th { color: var(--muted); font-weight: 600; font-size: 13px; }
@@ -63,6 +63,9 @@
     form.compose label { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
     form.compose input[type=text], form.compose textarea { width: 100%; box-sizing: border-box; color: var(--text); }
     form.compose textarea { font: inherit; line-height: 1.5; resize: vertical; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+    .meter { display: inline-block; height: 8px; background: var(--red); border-radius: 4px; vertical-align: middle; margin-right: 8px; }
     .err { color: #ff8a8d; font-weight: 700; }
     .ok { color: #7ee2a0; font-weight: 700; }
     [hidden] { display: none !important; }
@@ -88,10 +91,12 @@
       </div>
       <nav class="tabs" id="tabs">
         <button data-tab="vue" class="on">Vue d'ensemble</button>
+        <button data-tab="audience">Audience du site</button>
         <button data-tab="rapport">Compte rendu</button>
         <button data-tab="messages">Formulaire<span class="badge" id="badge" hidden></span></button>
         <button data-tab="boite">Boîte contact@<span class="badge" id="badgeBox" hidden></span></button>
         <button data-tab="ecrire">Envoyer un mail</button>
+        <button data-tab="ovh">OVHcloud</button>
         <button data-tab="paiements">Paiements</button>
         <button data-tab="echeances">À régler</button>
         <button data-tab="liens">Liens utiles</button>
@@ -107,6 +112,28 @@
         </div>
         <div class="card"><h3>Abonnements et versions du jeu</h3><p id="subs" class="muted"></p></div>
         <div class="card"><h3>Prochaines échéances</h3><div id="nextDue"></div></div>
+      </div>
+
+      <!-- Audience du site (mesure maison, anonyme) -->
+      <div data-panel="audience" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span><select id="audJours"><option value="1">Aujourd'hui</option><option value="7">7 derniers jours</option>
+            <option value="30" selected>30 derniers jours</option><option value="90">3 mois</option><option value="365">12 mois</option></select>
+            <span id="audState" class="muted"></span></span>
+          <button id="audRefresh" class="ghost small">Actualiser</button>
+        </div>
+        <div class="kpis" id="audKpis"></div>
+        <div class="card"><h3>Visiteurs par jour <span class="muted" style="font-size: 14px">(en clair : pages vues)</span></h3>
+          <div class="bars" id="audBars"></div><div class="axis" id="audAxis"></div></div>
+        <div class="grid2">
+          <div class="card"><h3>Pages, de la plus à la moins consultée</h3><div id="audPages" class="scroll"></div></div>
+          <div class="card"><h3>Pays</h3><div id="audPays" class="scroll"></div></div>
+          <div class="card"><h3>D'où viennent les visiteurs</h3><div id="audSources" class="scroll"></div></div>
+          <div class="card"><h3>Appareils et langues</h3><div id="audDevices"></div></div>
+        </div>
+        <p class="muted" style="font-size: 14px">Mesure maison, sans cookie ni Google Analytics : un visiteur est compté une fois par jour, sans être identifié
+          ni suivi d'un jour à l'autre (adresse IP non gardée, données effacées au bout de 13 mois). Les robots sont écartés.
+          Téléchargements : clics sur l'installeur (mesure du site) et décompte officiel de GitHub.</p>
       </div>
 
       <!-- Compte rendu -->
@@ -164,6 +191,19 @@
           <p class="muted" style="font-size: 14px">Le courriel part de contact@montventouxonline.fr, signé « Mont Ventoux Online » ; une copie est rangée dans le dossier « Envoyés » de ta messagerie.
             Pièces jointes : 5 fichiers et 8 Mo au plus.</p>
         </div>
+      </div>
+
+      <!-- Compte OVHcloud (API, lecture seule) -->
+      <div data-panel="ovh" hidden>
+        <div class="row" style="justify-content: space-between">
+          <span id="ovhState" class="muted"></span>
+          <span><button id="ovhRefresh" class="ghost small">Actualiser</button>
+            <a class="tag" href="https://www.ovh.com/manager/" target="_blank" rel="noopener">Ouvrir l'espace client OVHcloud</a></span>
+        </div>
+        <div class="card"><h3>Services et renouvellements</h3><div id="ovhServices" class="scroll"></div></div>
+        <div class="card"><h3>Factures (12 derniers mois)</h3><p id="ovhSolde" class="muted"></p><div id="ovhBills" class="scroll"></div></div>
+        <div class="card"><h3>Communications reçues d'OVHcloud</h3><div id="ovhComms"></div>
+          <p class="muted" style="font-size: 14px">Les courriels qu'OVHcloud envoie à l'adresse de ton compte (« Mes communications »), lus par l'API, en lecture seule.</p></div>
       </div>
 
       <!-- Paiements -->
@@ -395,6 +435,110 @@
     }).catch(function (e) { slot.innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
   }
 
+  // ---------- Compte OVHcloud ----------
+  var ovhLoaded = false;
+  var MODE = { automatic: "automatique", manual: "manuel", deleteAtExpiration: "s'arrête à l'échéance", deleteAtEndOfEngagement: "s'arrête à la fin de l'engagement" };
+  var prixTexte = function (p) { return p ? (p.texte || eur(p.valeur)) : "—"; };
+  // Durée ISO 8601 (P1Y, P1M, P3Y…) → « chaque année », « chaque mois », « tous les 3 ans ».
+  var periode = function (p) {
+    var m = /^P(\d+)([YM])$/.exec(p || ""); if (!m) return p || "";
+    var n = +m[1], an = m[2] === "Y";
+    return n === 1 ? (an ? "chaque année" : "chaque mois") : "tous les " + n + (an ? " ans" : " mois");
+  };
+  function loadOvh() {
+    ovhLoaded = true;
+    $("ovhState").textContent = "Lecture du compte OVHcloud…"; $("ovhState").className = "muted";
+    var erreur = function (el) { return function (e) { $(el).innerHTML = '<p class="err">' + esc(e.message || e) + "</p>"; }; };
+    var ko = function (r) { if (!r.disponible) throw new Error(r.erreur || "OVHcloud indisponible"); return r; };
+    var a = call("/v1/admin/ovh?quoi=services").then(ko).then(function (r) {
+      $("ovhServices").innerHTML = r.services.length ? '<table class="list"><tr><th>Service</th><th>Prochaine échéance</th><th>Renouvellement</th><th class="num">Prix</th></tr>' +
+        r.services.map(function (x) {
+          var d = x.prochaine ? daysTo(String(x.prochaine).slice(0, 10)) : null;
+          return "<tr><td><strong>" + esc(x.nom) + '</strong><br><span class="muted" style="font-size:13px">' + esc([x.type, x.etat].filter(Boolean).join(" · ")) + "</span></td><td>" +
+            (x.prochaine ? esc(dateFr(String(x.prochaine).slice(0, 10))) + (d != null && d <= 30 ? ' <span class="tag red">' + (d < 0 ? "dépassée" : "dans " + d + " j") + "</span>" : "") : "—") +
+            "</td><td>" + esc(MODE[x.mode] || x.mode || "—") + (x.periode ? " · " + esc(periode(x.periode)) : "") + '</td><td class="num">' + esc(prixTexte(x.prix)) + "</td></tr>";
+        }).join("") + "</table>" : '<p class="muted">Aucun service.</p>';
+    }).catch(erreur("ovhServices"));
+    var b = call("/v1/admin/ovh?quoi=factures").then(ko).then(function (r) {
+      var so = r.solde;
+      $("ovhSolde").innerHTML = so ? "Solde dû : <strong>" + esc(prixTexte(so.du)) + "</strong> · à payer : " + esc(prixTexte(so.a_payer)) + " · en cours : " + esc(prixTexte(so.en_attente)) : "";
+      var total = r.factures.reduce(function (t, f) { return t + (f.ttc ? f.ttc.valeur : 0); }, 0);
+      $("ovhBills").innerHTML = r.factures.length ? '<table class="list"><tr><th>Date</th><th>Facture</th><th class="num">TTC</th><th></th></tr>' +
+        r.factures.map(function (f) {
+          return "<tr><td>" + esc(dateFr(String(f.date).slice(0, 10))) + "</td><td>" + esc(f.id) + '</td><td class="num">' + esc(prixTexte(f.ttc)) + '</td><td class="num">' +
+            (f.pdf ? '<a class="tag" href="' + esc(f.pdf) + '" target="_blank" rel="noopener">PDF</a>' : "") + "</td></tr>";
+        }).join("") + '<tr><td colspan="2"><strong>Total sur 12 mois</strong></td><td class="num"><strong>' + esc(eur(total)) + "</strong></td><td></td></tr></table>"
+        : '<p class="muted">Aucune facture sur les 12 derniers mois.</p>';
+    }).catch(erreur("ovhBills"));
+    var c = call("/v1/admin/ovh?quoi=communications").then(ko).then(function (r) {
+      $("ovhComms").innerHTML = r.communications.length ? r.communications.map(function (m) {
+        return '<article class="msg mail" data-ovh="' + m.id + '"><header><span>OVHcloud</span><span>' + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) + "</span></header><h3>" + esc(m.objet) +
+          '</h3><div class="body" hidden>' + esc(m.texte) + "</div></article>";
+      }).join("") : '<p class="muted">Aucune communication.</p>';
+    }).catch(erreur("ovhComms"));
+    return Promise.all([a, b, c]).then(function () { $("ovhState").textContent = "Compte OVHcloud lu à " + timeFr(new Date().toISOString()) + "."; });
+  }
+
+  // ---------- Audience du site ----------
+  var audLoaded = false;
+  var PAGES = { "/": "Accueil", "/en.html": "Accueil (anglais)", "/histoire.html": "Histoire", "/en-history.html": "Histoire (anglais)",
+    "/bedoin.html": "Montée par Bédoin", "/malaucene.html": "Montée par Malaucène", "/sault.html": "Montée par Sault",
+    "/en-bedoin.html": "Bédoin (anglais)", "/en-malaucene.html": "Malaucène (anglais)", "/en-sault.html": "Sault (anglais)",
+    "/contact.html": "Contact", "/en-contact.html": "Contact (anglais)", "/installation.html": "Installation", "/en-installation.html": "Installation (anglais)" };
+  var paysNom = function (c) {
+    if (!c) return "inconnu";
+    try { return new Intl.DisplayNames(["fr"], { type: "region" }).of(c); } catch (e) { return c; }
+  };
+  var table = function (rows, cols) {
+    if (!rows.length) return '<p class="muted">Pas encore de données.</p>';
+    var max = Math.max.apply(null, rows.map(function (r) { return r[cols[1][1]] || 0; }).concat([1]));
+    return '<table class="list"><tr>' + cols.map(function (c, i) { return "<th" + (i ? ' class="num"' : "") + ">" + c[0] + "</th>"; }).join("") + "</tr>" +
+      rows.map(function (r) {
+        return "<tr>" + cols.map(function (c, i) {
+          var v = c[2] ? c[2](r[c[1]], r) : r[c[1]];
+          return i === 1 ? '<td class="num"><span class="meter" style="width:' + Math.round((r[c[1]] || 0) / max * 80) + 'px"></span>' + esc(v) + "</td>"
+            : "<td" + (i ? ' class="num"' : "") + ">" + esc(v) + "</td>";
+        }).join("") + "</tr>";
+      }).join("") + "</table>";
+  };
+  function loadAudience() {
+    audLoaded = true;
+    $("audState").textContent = " Lecture…";
+    return call("/v1/admin/audience?jours=" + $("audJours").value).then(function (r) {
+      var ev = {}; (r.evenements || []).forEach(function (e) { ev[e.evenement] = e; });
+      var gh = r.github || {};
+      var prof = r.profondeur || {};
+      $("audKpis").innerHTML = [
+        kpi("En ligne (5 dernières minutes)", r.en_ligne, r.en_ligne > 0),
+        kpi("Visiteurs aujourd'hui", r.aujourdhui.visiteurs || 0), kpi("Pages vues aujourd'hui", r.aujourdhui.vues || 0),
+        kpi("Visites sur la période", r.periode.visites || 0), kpi("Pages vues sur la période", r.periode.vues || 0),
+        kpi("Pages par visite", prof.pages_par_visite ? Number(prof.pages_par_visite).toFixed(1) : "—"),
+        kpi("Clics « Télécharger »", ev.telechargement ? ev.telechargement.n : 0),
+        kpi("Téléchargements (GitHub, total)", gh.disponible ? gh.total : "—"),
+        kpi("Messages envoyés (site)", ev.contact ? ev.contact.n : 0),
+        kpi("Repartis après 1 page", prof.une_seule_page != null ? Math.round(prof.une_seule_page * 100) + " %" : "—"),
+      ].join("");
+      // Courbe : un jour par barre (visiteurs), les vues en clair.
+      var days = [], by = {}; (r.par_jour || []).forEach(function (d) { by[d.jour] = d; });
+      for (var i = r.jours - 1; i >= 0; i--) days.push(new Date(Date.now() - i * 86400000).toISOString().slice(0, 10));
+      var max = Math.max.apply(null, days.map(function (d) { return by[d] ? by[d].vues : 0; }).concat([1]));
+      $("audBars").innerHTML = days.map(function (d) {
+        var x = by[d] || { vues: 0, visiteurs: 0, telechargements: 0 };
+        return '<div style="height:' + (x.vues / max * 100).toFixed(0) + '%;background:#ffb3b5" title="' + dateFr(d) + " : " + x.visiteurs + " visiteurs, " + x.vues + " pages vues" +
+          (x.telechargements ? ", " + x.telechargements + " clics Télécharger" : "") + '"><i style="height:' + (x.vues ? x.visiteurs / x.vues * 100 : 0).toFixed(0) + '%;background:var(--red)"></i></div>';
+      }).join("");
+      $("audAxis").innerHTML = "<span>" + dateFr(days[0]) + "</span><span>aujourd'hui</span>";
+      $("audPages").innerHTML = table(r.pages, [["Page", "page", function (v) { return PAGES[v] || v; }], ["Vues", "vues"], ["Visiteurs", "visiteurs"]]);
+      $("audPays").innerHTML = table(r.pays, [["Pays", "pays", paysNom], ["Visiteurs", "visiteurs"], ["Vues", "vues"]]);
+      $("audSources").innerHTML = table(r.sources, [["Provenance", "source"], ["Visiteurs", "visiteurs"]]);
+      var tot = function (l) { return l.reduce(function (t, x) { return t + x.visiteurs; }, 0) || 1; };
+      $("audDevices").innerHTML = '<p>' + (r.appareils || []).map(function (a) { return esc(a.appareil) + " : " + Math.round(a.visiteurs / tot(r.appareils) * 100) + " %"; }).join(" · ") + "</p>" +
+        "<p>" + (r.langues || []).map(function (a) { return (a.langue === "en" ? "anglais" : "français") + " : " + Math.round(a.visiteurs / tot(r.langues) * 100) + " %"; }).join(" · ") + "</p>" +
+        (gh.disponible && gh.versions && gh.versions.length ? '<p class="muted" style="font-size:14px">GitHub : ' + gh.versions.map(function (v) { return esc(v.version) + " : " + v.telechargements; }).join(" · ") + "</p>" : "");
+      $("audState").textContent = " lue à " + timeFr(r.le);
+    }).catch(function (e) { $("audState").textContent = " " + e.message; });
+  }
+
   // ---------- Paiements ----------
   function renderPayments() {
     var p = data.paiements;
@@ -452,6 +596,8 @@
       $("dash").hidden = false; $("login").hidden = true; $("state").textContent = "";
       // Boîte relevée à l'ouverture (en arrière-plan : la messagerie peut mettre quelques secondes).
       loadBox();
+      if (document.querySelector('#tabs button.on[data-tab="ovh"]')) loadOvh();
+      if (document.querySelector('#tabs button.on[data-tab="audience"]')) loadAudience();
     }).catch(function (e) { $("dash").hidden = true; $("login").hidden = false; $("state").textContent = e.message || "Erreur"; $("state").className = "err"; });
   }
   $("go").addEventListener("click", load);
@@ -464,10 +610,19 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-panel]"), function (p) { p.hidden = p.getAttribute("data-panel") !== b.getAttribute("data-tab"); });
     try { localStorage.setItem("mvo_admin_tab", b.getAttribute("data-tab")); } catch (err) {}
     if (b.getAttribute("data-tab") === "boite" && !boxLoaded && token && !$("dash").hidden) loadBox();
+    if (b.getAttribute("data-tab") === "ovh" && !ovhLoaded && token && !$("dash").hidden) loadOvh();
+    if (b.getAttribute("data-tab") === "audience" && !audLoaded && token && !$("dash").hidden) loadAudience();
   });
   try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
   $("rub").addEventListener("change", loadMessages);
   $("boxRefresh").addEventListener("click", loadBox);
+  $("ovhRefresh").addEventListener("click", loadOvh);
+  $("audRefresh").addEventListener("click", loadAudience);
+  $("audJours").addEventListener("change", loadAudience);
+  $("ovhComms").addEventListener("click", function (e) {
+    var card = e.target.closest("article[data-ovh]"); if (!card) return;
+    var body = card.querySelector(".body"); body.hidden = !body.hidden;
+  });
   $("folder").addEventListener("change", loadBox);
   var lireFichier = function (file) {
     return new Promise(function (ok, ko) {

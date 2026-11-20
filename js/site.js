@@ -4,6 +4,26 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ------------------------------------------------------------------
+  // Mesure d'audience anonyme (serveur Mont Ventoux Online) : page vue, téléchargement, message envoyé.
+  // Ni cookie ni stockage dans le navigateur ; l'adresse IP n'est pas gardée (voir la politique de confidentialité).
+  // ------------------------------------------------------------------
+  function mesure(e) {
+    if (location.hostname !== "montventouxonline.fr") return;       // pas d'essais locaux dans les chiffres
+    var data = JSON.stringify({ e: e, p: location.pathname, r: document.referrer, l: lang });
+    var url = "https://mvo-abonnement.montventouxonline.workers.dev/v1/visite";
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([data], { type: "text/plain" }))) return;
+      fetch(url, { method: "POST", body: data, keepalive: true, mode: "no-cors" });
+    } catch (err) { /* sans conséquence */ }
+  }
+  mesure("vue");
+  // Clic sur l'installeur (lien .exe ou page de téléchargement GitHub).
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest && ev.target.closest("a[href]");
+    if (a && /\.exe($|\?)|\/releases\/download\//i.test(a.getAttribute("href"))) mesure("telechargement");
+  });
+
+  // ------------------------------------------------------------------
   // Menu du téléphone
   // ------------------------------------------------------------------
   var top = document.getElementById("top"), btn = document.getElementById("menu"), nav = document.getElementById("nav");
@@ -114,7 +134,7 @@
         .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
         .then(function (r) {
           send.disabled = false;
-          if (r.ok) { form.reset(); sync(); status.className = "form-status ok"; status.textContent = msgs.ok; return; }
+          if (r.ok) { form.reset(); sync(); status.className = "form-status ok"; status.textContent = msgs.ok; mesure("contact"); return; }
           status.className = "form-status err"; status.textContent = msgs[r.erreur] || msgs.err;
         })
         .catch(function () { send.disabled = false; status.className = "form-status err"; status.textContent = msgs.err; });
