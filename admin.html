@@ -59,6 +59,10 @@
     form.ech { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; }
     form.ech .wide { grid-column: 1 / -1; }
     @media (max-width: 720px) { form.ech { grid-template-columns: 1fr 1fr; } }
+    form.compose { display: grid; gap: 10px; }
+    form.compose label { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
+    form.compose input[type=text], form.compose textarea { width: 100%; box-sizing: border-box; color: var(--text); }
+    form.compose textarea { font: inherit; line-height: 1.5; resize: vertical; }
     .err { color: #ff8a8d; font-weight: 700; }
     .ok { color: #7ee2a0; font-weight: 700; }
     [hidden] { display: none !important; }
@@ -87,6 +91,7 @@
         <button data-tab="rapport">Compte rendu</button>
         <button data-tab="messages">Formulaire<span class="badge" id="badge" hidden></span></button>
         <button data-tab="boite">Boîte contact@<span class="badge" id="badgeBox" hidden></span></button>
+        <button data-tab="ecrire">Envoyer un mail</button>
         <button data-tab="paiements">Paiements</button>
         <button data-tab="echeances">À régler</button>
         <button data-tab="liens">Liens utiles</button>
@@ -131,14 +136,34 @@
       <!-- Boîte contact@ (OVHcloud) -->
       <div data-panel="boite" hidden>
         <div class="row" style="justify-content: space-between">
-          <span id="boxState" class="muted"></span>
+          <select id="folder" title="Dossier de la messagerie"><option value="INBOX">Boîte de réception</option></select>
           <span><button id="boxRefresh" class="ghost small">Relever la boîte</button>
             <button id="mailTest" class="ghost small" title="Envoie à contact@ l'exemple du courriel reçu par un nouvel abonné">Courriel de confirmation d'essai</button>
             <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
         </div>
+        <p id="boxState" class="muted"></p>
         <div id="box"></div>
-        <p class="muted" style="font-size: 14px">Les 40 derniers courriels reçus sur contact@montventouxonline.fr, lus directement dans ta boîte OVHcloud.
-          Un courriel ouvert ici reste « non lu » dans ta messagerie. « Supprimer » le met à la corbeille de ta messagerie (récupérable), « Répondre » ouvre ta messagerie.</p>
+        <p class="muted" style="font-size: 14px">Les 40 derniers courriels du dossier choisi, lus directement dans ta boîte OVHcloud contact@montventouxonline.fr.
+          Un courriel ouvert ici reste « non lu » dans ta messagerie. « Supprimer » le met à la corbeille de ta messagerie (récupérable) ; « Répondre » ouvre l'onglet « Envoyer un mail ».</p>
+      </div>
+
+      <!-- Envoyer un mail (depuis contact@) -->
+      <div data-panel="ecrire" hidden>
+        <div class="card">
+          <h3>Envoyer un mail depuis contact@montventouxonline.fr</h3>
+          <form id="compose" class="compose">
+            <label>À <input name="a" type="text" placeholder="adresse@exemple.fr (plusieurs : séparées par des virgules)" autocomplete="off"></label>
+            <label>Copie <input name="cc" type="text" placeholder="facultatif" autocomplete="off"></label>
+            <label>Objet <input name="objet" type="text" maxlength="200"></label>
+            <label>Message <textarea name="texte" rows="14"></textarea></label>
+            <label>Pièces jointes <input name="pieces" type="file" multiple></label>
+            <input name="en_reponse_a" type="hidden">
+            <div class="row"><button type="submit" id="sendBtn">Envoyer</button>
+              <button type="button" class="ghost" id="composeReset">Effacer</button><span id="sendState"></span></div>
+          </form>
+          <p class="muted" style="font-size: 14px">Le courriel part de contact@montventouxonline.fr, signé « Mont Ventoux Online » ; une copie est rangée dans le dossier « Envoyés » de ta messagerie.
+            Pièces jointes : 5 fichiers et 8 Mo au plus.</p>
+        </div>
       </div>
 
       <!-- Paiements -->
@@ -282,12 +307,14 @@
   }
 
   // ---------- Messages ----------
+  var lastMessages = [];
   function loadMessages() {
     var q = "?" + ($("rub").value ? "rubrique=" + $("rub").value + "&" : "") + ($("unread").checked ? "non_lus=1" : "");
     return call("/v1/admin/messages" + q).then(function (r) {
+      lastMessages = r.messages;
       $("counts").textContent = r.par_rubrique.map(function (x) { return (LABEL[x.rubrique] || x.rubrique) + " : " + x.n + " (" + x.non_lus + " non lus)"; }).join(" · ") || "Aucun message pour l'instant.";
       $("msgs").innerHTML = r.messages.map(function (m) {
-        var mail = "mailto:" + esc(m.email) + "?subject=" + encodeURIComponent("Re : " + m.sujet);
+        var mail = "#";
         return '<article class="msg' + (m.lu ? "" : " unread") + '"><header><span>' + esc(LABEL[m.rubrique] || m.rubrique) + " · " + esc(dateFr(m.recu_le)) + " " + esc(m.recu_le.slice(11, 16)) +
           " · " + esc((m.langue || "fr").toUpperCase()) + "</span><span>" + esc(m.nom) + " &lt;" + esc(m.email) + "&gt;</span></header>" +
           "<h3>" + esc(m.sujet) + "</h3><p>" + esc(m.message) + "</p>" + (m.details ? '<p class="det">' + esc(m.details) + "</p>" : "") +
@@ -301,34 +328,70 @@
   var boxLoaded = false, boxMails = [];
   var timeFr = function (d) { return d ? new Date(d).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : ""; };
   var addr = function (t) { var m = /<([^>]+)>/.exec(t || ""); return m ? m[1] : (t || "").trim(); };
+  var ROLE = { inbox: "Boîte de réception", junk: "Indésirables (spams)", sent: "Envoyés", drafts: "Brouillons", trash: "Corbeille" };
+  var folders = [];
+  var folderOf = function (nom) { return folders.filter(function (f) { return f.nom === nom; })[0] || { nom: nom, role: nom === "INBOX" ? "inbox" : "", affiche: nom }; };
+  function loadFolders() {
+    return call("/v1/admin/dossiers").then(function (r) {
+      if (!r.disponible) return;
+      folders = r.dossiers || [];
+      var cur = $("folder").value || "INBOX";
+      $("folder").innerHTML = folders.map(function (f) {
+        return '<option value="' + esc(f.nom) + '">' + esc(ROLE[f.role] || f.affiche) + " — " + f.total + (f.non_lus ? " (" + f.non_lus + " non lus)" : "") + "</option>";
+      }).join("");
+      $("folder").value = folders.some(function (f) { return f.nom === cur; }) ? cur : "INBOX";
+      var inbox = folders.filter(function (f) { return f.role === "inbox"; })[0];
+      var b = $("badgeBox"); b.hidden = !(inbox && inbox.non_lus); b.textContent = inbox ? inbox.non_lus : "";
+    }).catch(function () {});
+  }
   function loadBox() {
-    $("boxState").textContent = "Relève de la boîte…"; $("boxState").className = "muted";
-    return call("/v1/admin/courriels").then(function (r) {
+    var f = folderOf($("folder").value || "INBOX");
+    $("boxState").textContent = "Relève du dossier…"; $("boxState").className = "muted";
+    loadFolders();
+    return call("/v1/admin/courriels?dossier=" + encodeURIComponent(f.nom)).then(function (r) {
       boxLoaded = true;
       if (!r.disponible) { $("box").innerHTML = ""; $("boxState").textContent = r.erreur || "Boîte indisponible"; $("boxState").className = "err"; return; }
       boxMails = r.courriels || [];
       var unread = boxMails.filter(function (m) { return !m.lu; }).length;
-      $("boxState").textContent = pl(r.total, "courriel") + " dans la boîte de réception · " + pl(unread, "non lu") + " parmi les " + boxMails.length + " derniers · relevée à " + timeFr(new Date().toISOString());
-      var b = $("badgeBox"); b.hidden = !unread; b.textContent = unread;
+      var sent = f.role === "sent" || f.role === "drafts", trash = f.role === "trash";
+      $("boxState").textContent = (ROLE[f.role] || f.affiche) + " : " + pl(r.total, "courriel") + (sent ? "" : " · " + pl(unread, "non lu") + " parmi les " + boxMails.length + " derniers") + " · relevé à " + timeFr(new Date().toISOString());
       $("box").innerHTML = boxMails.length ? boxMails.map(function (m) {
-        return '<article class="msg mail' + (m.lu ? "" : " unread") + '" data-uid="' + m.uid + '"><header><span>' + esc(m.de) + "</span><span>" + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) +
-          (m.repondu ? ' · <span class="tag">répondu</span>' : "") + ' <button class="ghost small" data-trash="' + m.uid + '" title="Mettre à la corbeille de la messagerie">Supprimer</button>' +
+        return '<article class="msg mail' + (m.lu || sent ? "" : " unread") + '" data-uid="' + m.uid + '"><header><span>' + (sent ? "À : " + esc(m.a) : esc(m.de)) + "</span><span>" + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) +
+          (m.repondu ? ' · <span class="tag">répondu</span>' : "") + (trash ? "" : ' <button class="ghost small" data-trash="' + m.uid + '" title="Mettre à la corbeille de la messagerie">Supprimer</button>') +
           "</span></header><h3>" + esc(m.objet) + '</h3><div class="slot"></div></article>';
-      }).join("") : '<p class="muted">La boîte de réception est vide.</p>';
+      }).join("") : '<p class="muted">Ce dossier est vide.</p>';
     }).catch(function (e) { $("boxState").textContent = e.message || "Erreur"; $("boxState").className = "err"; });
   }
+  // Ouvre l'onglet « Envoyer un mail » pré-rempli (réponse).
+  function compose(v) {
+    var f = $("compose");
+    ["a", "cc", "objet", "texte", "en_reponse_a"].forEach(function (k) { f.elements[k].value = v[k] || ""; });
+    f.elements.pieces.value = "";
+    $("sendState").textContent = "";
+    document.querySelector('#tabs button[data-tab="ecrire"]').click();
+    f.elements.texte.focus(); f.elements.texte.setSelectionRange(0, 0);
+  }
+  var SIGNATURE = "\n\n--\nMont Ventoux Online\nhttps://montventouxonline.fr";
+  var reObjet = function (o) { return /^re\s*:/i.test(o) ? o : "Re : " + o; };
+  var citer = function (de, date, texte) {
+    return "\n\nLe " + dateFr(date) + " à " + timeFr(date) + ", " + de + " a écrit :\n" + String(texte || "").split("\n").map(function (l) { return "> " + l; }).join("\n");
+  };
   function openMail(card) {
     var slot = card.querySelector(".slot");
     if (slot.innerHTML) { slot.innerHTML = ""; return; }
     slot.innerHTML = '<p class="muted">Ouverture…</p>';
-    call("/v1/admin/courriels?uid=" + card.getAttribute("data-uid")).then(function (r) {
+    call("/v1/admin/courriels?dossier=" + encodeURIComponent($("folder").value || "INBOX") + "&uid=" + card.getAttribute("data-uid")).then(function (r) {
       var c = r.courriel;
       if (!c) { slot.innerHTML = '<p class="err">' + esc(r.erreur || "Courriel introuvable") + "</p>"; return; }
       if (c.trop_gros) { slot.innerHTML = '<p class="muted">Courriel trop volumineux pour être affiché ici : ouvre-le dans le webmail.</p>'; return; }
-      var mail = "mailto:" + encodeURIComponent(addr(c.repondre_a)) + "?subject=" + encodeURIComponent(/^re\s*:/i.test(c.objet) ? c.objet : "Re : " + c.objet);
-      slot.innerHTML = '<div class="body">' + esc(c.texte || "(pas de texte)") + "</div>" +
+      slot.innerHTML = (c.a ? '<p class="det">À : ' + esc(c.a) + (c.cc ? " · Copie : " + esc(c.cc) : "") + "</p>" : "") +
+        '<div class="body">' + esc(c.texte || "(pas de texte)") + "</div>" +
         (c.pieces && c.pieces.length ? '<p class="det">Pièces jointes : ' + esc(c.pieces.join(", ")) + " (à ouvrir dans le webmail)</p>" : "") +
-        '<div class="row" style="margin: 8px 0 0"><a class="tag red" href="' + mail + '">Répondre</a></div>';
+        '<div class="row" style="margin: 8px 0 0"><button class="small" data-reply-mail="1">Répondre</button></div>';
+      slot.querySelector("button[data-reply-mail]").addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        compose({ a: addr(c.repondre_a), objet: reObjet(c.objet), texte: SIGNATURE + citer(c.de, c.date, c.texte), en_reponse_a: c.message_id });
+      });
     }).catch(function (e) { slot.innerHTML = '<p class="err">' + esc(e.message) + "</p>"; });
   }
 
@@ -405,6 +468,34 @@
   try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
   $("rub").addEventListener("change", loadMessages);
   $("boxRefresh").addEventListener("click", loadBox);
+  $("folder").addEventListener("change", loadBox);
+  var lireFichier = function (file) {
+    return new Promise(function (ok, ko) {
+      var fr = new FileReader();
+      fr.onload = function () { ok({ nom: file.name, type: file.type || "application/octet-stream", base64: String(fr.result).split(",")[1] || "" }); };
+      fr.onerror = ko; fr.readAsDataURL(file);
+    });
+  };
+  $("composeReset").addEventListener("click", function () { compose({ texte: SIGNATURE }); });
+  $("compose").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, files = Array.prototype.slice.call(f.elements.pieces.files || []);
+    if (files.length > 5) { $("sendState").textContent = "5 pièces jointes au plus."; $("sendState").className = "err"; return; }
+    if (files.reduce(function (t, x) { return t + x.size; }, 0) > 8 * 1024 * 1024) { $("sendState").textContent = "Pièces jointes trop lourdes (8 Mo au plus)."; $("sendState").className = "err"; return; }
+    if (!confirm("Envoyer ce courriel à " + f.elements.a.value + " ?")) return;
+    $("sendBtn").disabled = true; $("sendState").textContent = "Envoi…"; $("sendState").className = "";
+    Promise.all(files.map(lireFichier)).then(function (pieces) {
+      return post("/v1/admin/envoyer", { a: f.elements.a.value, cc: f.elements.cc.value, objet: f.elements.objet.value, texte: f.elements.texte.value,
+        en_reponse_a: f.elements.en_reponse_a.value, pieces: pieces });
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.erreur || "Envoi impossible");
+      $("sendState").textContent = "Envoyé" + (r.range ? " (copie dans Envoyés)" : "") + "."; $("sendState").className = "ok";
+      ["a", "cc", "objet", "en_reponse_a"].forEach(function (k) { f.elements[k].value = ""; });
+      f.elements.texte.value = SIGNATURE; f.elements.pieces.value = "";
+    }).catch(function (err) { $("sendState").textContent = err.message; $("sendState").className = "err"; })
+      .then(function () { $("sendBtn").disabled = false; });
+  });
+  $("compose").elements.texte.value = SIGNATURE;
   $("mailTest").addEventListener("click", function () {
     $("boxState").textContent = "Envoi du courriel d'essai à contact@…"; $("boxState").className = "muted";
     post("/v1/admin/confirmation-essai", {}).then(function (r) {
@@ -419,7 +510,8 @@
       var titre = card.querySelector("h3").textContent;
       if (!confirm("Mettre ce courriel à la corbeille ?\n\n« " + titre + " »\n\nIl reste récupérable dans la corbeille de ta messagerie OVHcloud.")) return;
       del.disabled = true; del.textContent = "…";
-      post("/v1/admin/courriels/corbeille", { uids: [+del.getAttribute("data-trash")] }).then(function (r) {
+      post("/v1/admin/courriels/corbeille", { uids: [+del.getAttribute("data-trash")], dossier: $("folder").value || "INBOX" }).then(function (r) {
+        loadFolders();
         if (!r.ok) throw new Error(r.erreur || "Suppression impossible");
         card.remove();
         boxMails = boxMails.filter(function (m) { return m.uid !== +del.getAttribute("data-trash"); });
@@ -440,6 +532,11 @@
     var id = b ? +b.getAttribute("data-id") : reply ? +reply.getAttribute("data-reply") : null;
     if (id == null) return;
     var lu = b ? b.getAttribute("data-lu") === "1" : true;
+    if (reply) {
+      e.preventDefault();
+      var m = (lastMessages || []).filter(function (x) { return x.id === id; })[0];
+      if (m) compose({ a: m.email, objet: reObjet(m.sujet), texte: "Bonjour " + (m.nom || "") + ",\n\n" + SIGNATURE.replace(/^\n\n/, "") + citer(m.nom + " <" + m.email + ">", m.recu_le, m.message) });
+    }
     post("/v1/admin/lu", { id: id, lu: lu }).then(function () { return Promise.all([loadMessages(), call("/v1/admin/tableau")]); })
       .then(function (r) { data = r[1]; renderOverview(); renderReport(); });
   });
