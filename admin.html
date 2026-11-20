@@ -65,6 +65,13 @@
     form.compose textarea { font: inherit; line-height: 1.5; resize: vertical; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
     @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+    .funnel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    @media (max-width: 860px) { .funnel { grid-template-columns: 1fr 1fr; } }
+    .funnel div { background: var(--bg-3); border-radius: 10px; padding: 12px; }
+    .funnel .step { color: var(--red); font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .funnel strong { display: block; font-size: 26px; line-height: 1.2; margin: 4px 0; }
+    .funnel span { color: var(--muted); font-size: 13px; display: block; }
+    .funnel .bad strong { color: #ff8a8d; } .funnel .good strong { color: #7ee2a0; }
     .meter { display: inline-block; height: 8px; background: var(--red); border-radius: 4px; vertical-align: middle; margin-right: 8px; }
     .err { color: #ff8a8d; font-weight: 700; }
     .ok { color: #7ee2a0; font-weight: 700; }
@@ -122,6 +129,10 @@
             <span id="audState" class="muted"></span></span>
           <button id="audRefresh" class="ghost small">Actualiser</button>
         </div>
+        <div class="card"><h3>Entonnoir : du visiteur à l'abonné <span class="muted" style="font-size: 14px">(30 derniers jours)</span></h3>
+          <div class="funnel" id="funnel"></div>
+          <p class="muted" style="font-size: 13px; margin: 8px 0 0">Les téléchargements GitHub sont un total depuis la première publication (GitHub ne donne pas de date par téléchargement) ;
+            les autres chiffres portent sur 30 jours. Un ratio n'apparaît que lorsque son dénominateur n'est pas nul.</p></div>
         <div class="kpis" id="audKpis"></div>
         <div class="card"><h3>Visiteurs par jour <span class="muted" style="font-size: 14px">(en clair : pages vues)</span></h3>
           <div class="bars" id="audBars"></div><div class="axis" id="audAxis"></div></div>
@@ -501,6 +512,32 @@
         }).join("") + "</tr>";
       }).join("") + "</table>";
   };
+  // Entonnoir : visiteurs → clics Télécharger → téléchargements → nouveaux PC → abonnés ; et résiliations.
+  function renderFunnel(r) {
+    var ev = {}; (r.evenements || []).forEach(function (e) { ev[e.evenement] = e; });
+    var visiteurs = r.periode.visites || 0, clics = ev.telechargement ? ev.telechargement.n : 0;
+    var gh = r.github && r.github.disponible ? r.github.total : null;
+    var j = data ? data.joueurs : {}, a = data ? data.abonnements : {}, p = data ? data.paiements : {};
+    var nouveauxPc = j.nouveaux_30 || 0, actifs30 = j.j30 || 0;
+    var nouveauxAbos = p && p.disponible ? (p.j30.premiers || 0) : null;
+    var resil = a.resiliations_30 || 0, base = (a.actifs || 0) + resil;
+    var pct = function (num, den) { return den ? (num / den * 100) : null; };
+    var fmt = function (v) { return v == null ? "—" : (v >= 10 ? Math.round(v) : v.toFixed(1)) + " %"; };
+    // Repères (petit jeu indépendant, premiers mois) : à affiner avec tes propres chiffres.
+    var ratios = [
+      ["Site", "Intérêt pour le téléchargement", pct(clics, visiteurs), clics + " clics ÷ " + visiteurs + " visites", 5, 15],
+      ["Téléchargement", "Téléchargements aboutis", pct(gh || 0, clics), (gh == null ? "?" : gh) + " GitHub ÷ " + clics + " clics", 60, 90],
+      ["Activation", "PC lancés après téléchargement", pct(nouveauxPc, gh || 0), nouveauxPc + " nouveaux PC ÷ " + (gh == null ? "?" : gh) + " téléchargements", 40, 70],
+      ["Conversion", "Joueurs devenus abonnés", nouveauxAbos == null ? null : pct(nouveauxAbos, actifs30), (nouveauxAbos == null ? "?" : nouveauxAbos) + " abonnements ÷ " + actifs30 + " joueurs actifs", 2, 6],
+      ["Churn", "Résiliations", pct(resil, base), resil + " résiliés ÷ " + base + " abonnements", null, null, true],
+    ];
+    $("funnel").innerHTML = ratios.map(function (x) {
+      var v = x[2], cls = "";
+      if (v != null && x[6]) cls = v > 10 ? "bad" : v <= 5 ? "good" : "";
+      else if (v != null && x[4] != null) cls = v < x[4] ? "bad" : v >= x[5] ? "good" : "";
+      return '<div class="' + cls + '"><span class="step">' + x[0] + "</span><strong>" + fmt(v) + "</strong><span>" + esc(x[1]) + "</span><span>" + esc(x[3]) + "</span></div>";
+    }).join("");
+  }
   function loadAudience() {
     audLoaded = true;
     $("audState").textContent = " Lecture…";
@@ -508,6 +545,9 @@
       var ev = {}; (r.evenements || []).forEach(function (e) { ev[e.evenement] = e; });
       var gh = r.github || {};
       var prof = r.profondeur || {};
+      // L'entonnoir porte toujours sur 30 jours (comme les chiffres joueurs et abonnements).
+      if (r.jours === 30) renderFunnel(r);
+      else call("/v1/admin/audience?jours=30").then(renderFunnel);
       $("audKpis").innerHTML = [
         kpi("En ligne (5 dernières minutes)", r.en_ligne, r.en_ligne > 0),
         kpi("Visiteurs aujourd'hui", r.aujourdhui.visiteurs || 0), kpi("Pages vues aujourd'hui", r.aujourdhui.vues || 0),
