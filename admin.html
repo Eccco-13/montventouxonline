@@ -420,7 +420,7 @@
       boxMails = r.courriels || [];
       var unread = boxMails.filter(function (m) { return !m.lu; }).length;
       var sent = f.role === "sent" || f.role === "drafts", trash = f.role === "trash";
-      $("boxState").textContent = (ROLE[f.role] || f.affiche) + " : " + pl(r.total, "courriel") + (sent ? "" : " · " + pl(unread, "non lu") + " parmi les " + boxMails.length + " derniers") + " · relevé à " + timeFr(new Date().toISOString());
+      $("boxState").textContent = (ROLE[f.role] || f.affiche) + " : " + pl(r.total, "courriel") + (sent ? "" : " · " + pl(unread, "non lu", "non lus") + " parmi les " + boxMails.length + " derniers") + " · relevé à " + timeFr(new Date().toISOString());
       $("box").innerHTML = boxMails.length ? boxMails.map(function (m) {
         return '<article class="msg mail' + (m.lu || sent ? "" : " unread") + '" data-uid="' + m.uid + '"><header><span>' + (sent ? "À : " + esc(m.a) : esc(m.de)) + "</span><span>" + esc(dateFr(m.date)) + " " + esc(timeFr(m.date)) +
           (m.repondu ? ' · <span class="tag">répondu</span>' : "") + (trash ? "" : ' <button class="ghost small" data-trash="' + m.uid + '" title="Mettre à la corbeille de la messagerie">Supprimer</button>') +
@@ -446,9 +446,17 @@
     var slot = card.querySelector(".slot");
     if (slot.innerHTML) { slot.innerHTML = ""; return; }
     slot.innerHTML = '<p class="muted">Ouverture…</p>';
-    call("/v1/admin/courriels?dossier=" + encodeURIComponent($("folder").value || "INBOX") + "&uid=" + card.getAttribute("data-uid")).then(function (r) {
+    var uid = +card.getAttribute("data-uid");
+    call("/v1/admin/courriels?dossier=" + encodeURIComponent($("folder").value || "INBOX") + "&uid=" + uid + "&lu=1").then(function (r) {
       var c = r.courriel;
       if (!c) { slot.innerHTML = '<p class="err">' + esc(r.erreur || "Courriel introuvable") + "</p>"; return; }
+      // Ouvert = lu (aussi dans le webmail) : cadre rouge retiré, compteurs mis à jour.
+      var m = boxMails.filter(function (x) { return x.uid === uid; })[0];
+      if (m && !m.lu) {
+        m.lu = true; card.classList.remove("unread");
+        var b = $("badgeBox"), n = Math.max((+b.textContent || 0) - 1, 0); b.textContent = n; b.hidden = !n;
+        loadFolders();
+      }
       if (c.trop_gros) { slot.innerHTML = '<p class="muted">Courriel trop volumineux pour être affiché ici : ouvre-le dans le webmail.</p>'; return; }
       slot.innerHTML = (c.a ? '<p class="det">À : ' + esc(c.a) + (c.cc ? " · Copie : " + esc(c.cc) : "") + "</p>" : "") +
         '<div class="body">' + esc(c.texte || "(pas de texte)") + "</div>" +
