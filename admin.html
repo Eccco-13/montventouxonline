@@ -15,7 +15,15 @@
     .admin button { font: inherit; font-weight: 700; color: #fff; background: var(--red); border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
     .admin button.ghost { background: var(--bg-3); }
     .admin button.small { padding: 5px 12px; font-size: 14px; }
-    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 22px; border-bottom: 1px solid var(--line); }
+    .groups { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0 0; }
+    .groups button { background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); border-radius: 12px; padding: 12px 10px;
+      font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .groups button .ico { font-size: 18px; letter-spacing: 0; }
+    .groups button.on { color: #fff; border-color: var(--red); background: linear-gradient(180deg, rgba(227, 38, 43, 0.22), rgba(227, 38, 43, 0.06)); }
+    .groups .badge { background: var(--red); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 12px; letter-spacing: 0; }
+    @media (max-width: 640px) { .groups { grid-template-columns: 1fr 1fr; } .groups button { font-size: 13px; } }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 22px; border-bottom: 1px solid var(--line); }
+    .tabs button[hidden] { display: none; }
     .tabs button { background: none; color: var(--muted); border-radius: 10px 10px 0 0; padding: 10px 14px; }
     .tabs button.on { color: var(--text); background: var(--bg-2); box-shadow: inset 0 -3px 0 var(--red); }
     .tabs .badge { background: var(--red); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 12px; margin-left: 6px; }
@@ -96,17 +104,24 @@
         <span id="stamp"></span>
         <button id="refresh" class="ghost small">Actualiser</button>
       </div>
+      <!-- Navigation à deux niveaux : groupes, puis onglets du groupe -->
+      <nav class="groups" id="groups">
+        <button data-group="activite" class="on"><span class="ico">📊</span>Activité</button>
+        <button data-group="gestion"><span class="ico">💳</span>Gestion</button>
+        <button data-group="communication"><span class="ico">✉️</span>Communication<span class="badge" id="badgeGroup" hidden></span></button>
+        <button data-group="outils"><span class="ico">🔗</span>Outils</button>
+      </nav>
       <nav class="tabs" id="tabs">
-        <button data-tab="vue" class="on">Vue d'ensemble</button>
-        <button data-tab="audience">Audience du site</button>
-        <button data-tab="rapport">Compte rendu</button>
-        <button data-tab="messages">Formulaire<span class="badge" id="badge" hidden></span></button>
-        <button data-tab="boite">Boîte contact@<span class="badge" id="badgeBox" hidden></span></button>
-        <button data-tab="ecrire">Envoyer un mail</button>
-        <button data-tab="ovh">OVHcloud</button>
-        <button data-tab="paiements">Paiements</button>
-        <button data-tab="echeances">À régler</button>
-        <button data-tab="liens">Liens utiles</button>
+        <button data-tab="vue" data-group="activite" class="on">Vue d'ensemble</button>
+        <button data-tab="audience" data-group="activite">Audience du site</button>
+        <button data-tab="rapport" data-group="activite">Compte rendu</button>
+        <button data-tab="paiements" data-group="gestion">Paiements</button>
+        <button data-tab="echeances" data-group="gestion">À régler</button>
+        <button data-tab="ovh" data-group="gestion">OVHcloud</button>
+        <button data-tab="boite" data-group="communication">Boîte contact@<span class="badge" id="badgeBox" hidden></span></button>
+        <button data-tab="ecrire" data-group="communication">Envoyer un mail</button>
+        <button data-tab="messages" data-group="communication">Formulaire<span class="badge" id="badge" hidden></span></button>
+        <button data-tab="liens" data-group="outils">Liens utiles</button>
       </nav>
 
       <!-- Vue d'ensemble -->
@@ -649,10 +664,32 @@
     Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (x) { x.classList.toggle("on", x === b); });
     Array.prototype.forEach.call(document.querySelectorAll("[data-panel]"), function (p) { p.hidden = p.getAttribute("data-panel") !== b.getAttribute("data-tab"); });
     try { localStorage.setItem("mvo_admin_tab", b.getAttribute("data-tab")); } catch (err) {}
+    showGroup(b.getAttribute("data-group"));
+    lastTab[b.getAttribute("data-group")] = b.getAttribute("data-tab");
     if (b.getAttribute("data-tab") === "boite" && !boxLoaded && token && !$("dash").hidden) loadBox();
     if (b.getAttribute("data-tab") === "ovh" && !ovhLoaded && token && !$("dash").hidden) loadOvh();
     if (b.getAttribute("data-tab") === "audience" && !audLoaded && token && !$("dash").hidden) loadAudience();
   });
+  // Groupes : n'affichent que leurs onglets ; un clic rouvre le dernier onglet consulté du groupe.
+  var lastTab = {};
+  function showGroup(g) {
+    Array.prototype.forEach.call(document.querySelectorAll("#groups button"), function (x) { x.classList.toggle("on", x.getAttribute("data-group") === g); });
+    Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (x) { x.hidden = x.getAttribute("data-group") !== g; });
+  }
+  $("groups").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-group]"); if (!b) return;
+    var g = b.getAttribute("data-group");
+    var t = document.querySelector('#tabs button[data-tab="' + (lastTab[g] || "") + '"]') || document.querySelector('#tabs button[data-group="' + g + '"]');
+    t.click();
+  });
+  // Pastille du groupe Communication : non lus du formulaire + de la boîte contact@.
+  var syncGroupBadge = function () {
+    var n = (+($("badge").hidden ? 0 : $("badge").textContent) || 0) + (+($("badgeBox").hidden ? 0 : $("badgeBox").textContent) || 0);
+    var g = $("badgeGroup"); g.hidden = !n; g.textContent = n;
+  };
+  new MutationObserver(syncGroupBadge).observe($("badge"), { attributes: true, childList: true, characterData: true, subtree: true });
+  new MutationObserver(syncGroupBadge).observe($("badgeBox"), { attributes: true, childList: true, characterData: true, subtree: true });
+  showGroup("activite");
   try { var t = localStorage.getItem("mvo_admin_tab"); var tb = t && document.querySelector('#tabs button[data-tab="' + t + '"]'); if (tb) tb.click(); } catch (e) {}
   $("rub").addEventListener("change", loadMessages);
   $("boxRefresh").addEventListener("click", loadBox);
