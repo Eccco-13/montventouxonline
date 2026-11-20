@@ -28,23 +28,26 @@ header.top {
   background: rgba(13, 13, 15, 0.92); backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
-header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 24px; }
 header.top .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: 0.02em; }
-header.top .brand img { width: 36px; height: 36px; border-radius: 8px; }
-header.top nav { display: flex; gap: 22px; flex-wrap: wrap; }
-header.top nav a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 15px; }
-header.top nav a:hover { color: var(--text); }
+header.top .brand { font-size: 18px; }
+header.top .brand img { width: 38px; height: 38px; border-radius: 8px; }
+/* Une seule ligne : les liens se partagent l'espace entre le nom et le choix de langue. */
+header.top nav { display: flex; gap: 26px; flex-wrap: nowrap; margin-left: auto; }
+header.top nav a { text-decoration: none; color: #d4d7dc; font-weight: 600; font-size: 16px; white-space: nowrap;
+  padding: 6px 0; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+header.top nav a:hover { color: #fff; border-bottom-color: var(--red); }
 header.top .brand { white-space: nowrap; }
 /* Menu du téléphone : bouton ☰ qui déplie la navigation sous l'en-tête. */
 header.top .menu { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; color: var(--text);
   width: 44px; height: 40px; font-size: 22px; line-height: 1; cursor: pointer; padding: 0; }
 header.top .right { display: flex; align-items: center; gap: 10px; }
-@media (max-width: 900px) {
+@media (max-width: 1060px) {
   header.top .menu { display: block; }
-  header.top nav.main { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0;
+  header.top nav.main { display: none; position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; gap: 0;
     background: rgba(13, 13, 15, 0.98); border-bottom: 1px solid var(--line); padding: 6px 0 10px; }
   header.top.open nav.main { display: flex; }
-  header.top nav.main a { padding: 13px 20px; font-size: 17px; color: var(--text); }
+  header.top nav.main a { padding: 13px 20px; font-size: 17px; color: var(--text); border-bottom: 0; }
   header.top .brand { font-size: 16px; }
 }
 @media (max-width: 720px) {
@@ -55,7 +58,7 @@ header.top .right { display: flex; align-items: center; gap: 10px; }
 /* Bandeau d'accueil */
 .hero { position: relative; min-height: 86vh; display: flex; align-items: flex-end; overflow: hidden; }
 /* Image élargie et calée à gauche : la cycliste (au centre de la photo) passe à droite du texte. */
-.hero > img.bg { position: absolute; top: 0; left: 0; width: 125%; max-width: none; height: 100%; object-fit: cover; object-position: left center; filter: brightness(0.85) saturate(1.08); }
+.hero > img.bg { position: absolute; top: 0; left: 0; width: 125%; max-width: none; height: 100%; object-fit: cover; object-position: 72% center; filter: brightness(0.85) saturate(1.08); }
 .hero::after { content: ""; position: absolute; inset: 0; background:
   linear-gradient(90deg, rgba(13,13,15,0.78) 0%, rgba(13,13,15,0.45) 38%, rgba(13,13,15,0) 62%),
   linear-gradient(180deg, rgba(13,13,15,0) 55%, rgba(13,13,15,0.95) 100%); }
