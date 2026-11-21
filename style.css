@@ -351,3 +351,7 @@ kbd { display: inline-block; min-width: 1.6em; padding: 1px 7px; border-radius: 
 .steps li::before { content: counter(step); position: absolute; left: 16px; top: 12px; width: 26px; height: 26px; border-radius: 50%; background: var(--red); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 14px; }
 .steps strong { color: #fff; display: block; margin-bottom: 4px; }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+/* Vidéo de démonstration (accueil) */
+.demo-video video { display: block; width: 100%; max-width: 960px; margin: 24px auto 0; aspect-ratio: 16 / 9; border-radius: 12px; background: #000; box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+.demo-video h2, .demo-video .kicker { text-align: center; }
