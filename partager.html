@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none';img-src 'self' blob:;style-src 'unsafe-inline';script-src 'unsafe-inline'">
+<title>Partager ma photo — Mont Ventoux Online</title><link rel="icon" type="image/png" href="img/icone.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:#111214;color:#f2f2f0;font:16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center;gap:12px}
+h1{font-size:14px;letter-spacing:.08em;margin:0}h1 i{color:#d6202a;font-style:normal}
+img{width:100%;max-width:900px;margin:0 auto;border-radius:10px;-webkit-touch-callout:default}
+.b{display:block;width:100%;border:0;border-radius:14px;padding:16px 8px;font:600 17px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;text-align:center;text-decoration:none;background:#2b2e34;color:#f2f2f0}
+#partager{background:#f5c518;color:#111;font-size:20px;padding:20px 8px}
+.ligne{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px}
+p{margin:0;color:#9a9da3;font-size:14px;text-align:center}#etat{font-size:16px;color:#f2f2f0}
+[hidden]{display:none!important}
+</style></head><body>
+<h1>MONT VENTOUX <i>ONLINE</i></h1>
+<p id="etat"></p><img id="photo" alt="" hidden>
+<button class="b" id="partager" hidden></button>
+<div class="ligne" id="ligne" hidden><a class="b" id="garder"></a><button class="b" id="fermer"></button></div>
+<p id="note" hidden></p>
+<script>
+// Relais de partage de la télécommande : le jeu sert sa page en http sur le réseau local, où les téléphones interdisent
+// le partage natif. La page de la télécommande remet ici l'image d'onglet à onglet ; rien n'est envoyé à un serveur.
+(function(){
+var en=/[?&]l=en/.test(location.search),$=function(i){return document.getElementById(i)},recu=false,essais=0,fichier=null;
+function T(f,e){return en?e:f}
+if(en){document.documentElement.lang="en";document.title="Share my picture — Mont Ventoux Online"}
+var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform=="MacIntel"&&navigator.maxTouchPoints>1);
+var longue=ios?T("Appuyez longuement sur l'image, puis « Partager… » ou « Enregistrer dans Photos ».","Long-press the picture, then “Share…” or “Save to Photos”."):T("Appuyez longuement sur l'image, puis « Partager l'image ».","Long-press the picture, then “Share image”.");
+$("partager").textContent=T("Partager","Share");$("garder").textContent=T("⬇ Enregistrer","⬇ Save");$("fermer").textContent=T("Fermer","Close");
+$("etat").textContent=T("Réception de la photo…","Receiving the picture…");
+function local(o){return /^http:\/\/(localhost|127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d+\.\d+|169\.254\.\d+\.\d+)(:\d+)?$/.test(o)}
+function echec(){$("etat").textContent=T("La photo n'est pas arrivée. Revenez à l'onglet de la télécommande et appuyez longuement sur l'image pour la partager.","The picture did not arrive. Go back to the remote's tab and long-press the picture to share it.");$("ligne").hidden=false;$("garder").hidden=true}
+window.addEventListener("message",function(e){
+if(recu||!window.opener||e.source!==window.opener||!local(e.origin))return;
+var d=e.data;if(!d||d.type!=="mvo-photo"||!(d.jpg instanceof ArrayBuffer)||d.jpg.byteLength>12e6)return;
+var o=new Uint8Array(d.jpg);if(o[0]!==255||o[1]!==216||o[2]!==255)return;
+recu=true;var nom=String(d.nom||"mvo.jpg").replace(/[^\w.-]/g,"_").slice(0,60);
+fichier=new File([d.jpg],nom,{type:"image/jpeg"});var u=URL.createObjectURL(fichier);
+$("photo").src=u;$("photo").hidden=false;$("garder").href=u;$("garder").download=nom;$("garder").hidden=false;$("ligne").hidden=false;
+var ok=!!(navigator.canShare&&navigator.share&&navigator.canShare({files:[fichier]}));
+$("partager").hidden=!ok;$("etat").textContent=ok?T("Votre photo est prête à être partagée.","Your picture is ready to share."):longue;
+$("note").textContent=T("La photo reste sur votre téléphone : elle n'est envoyée à aucun serveur.","The picture stays on your phone: it is not sent to any server.");$("note").hidden=false;
+e.source.postMessage({type:"mvo-recu"},e.origin)});
+$("partager").onclick=function(){navigator.share({files:[fichier]}).catch(function(x){if(x&&x.name!=="AbortError")$("etat").textContent=longue})};
+$("fermer").onclick=function(){window.close()};
+(function appel(){if(recu)return;if(!window.opener||++essais>40)return echec();window.opener.postMessage({type:"mvo-pret"},"*");setTimeout(appel,200)})();
+})();
+</script></body></html>
