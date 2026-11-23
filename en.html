@@ -6,7 +6,7 @@
   <title>Mont Ventoux Online — cycling simulator for smart trainers: Mont Ventoux and Provence</title>
   <meta name="description" content="Indoor cycling game and simulator for smart trainers: Mont Ventoux via Bédoin, Malaucène and Sault, the Dentelles, Gordes and the Via Venaissia, 27 real routes of the Vaucluse, Provence. IGN terrain, today's weather, ERG training. Free trial, even with the keyboard.">
   <link rel="icon" type="image/png" href="img/icone.png">
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=18">
   <meta property="og:title" content="Mont Ventoux Online">
   <meta property="og:description" content="The Giant of Provence and the whole Vaucluse, on your smart trainer.">
   <meta property="og:image" content="https://montventouxonline.fr/img/hero.jpg">
@@ -52,8 +52,8 @@
     <div class="soon-badge">Coming soon • beta in progress</div>
     <h1>The Ventoux is waiting for you. In your living room.</h1>
     <p>The hairpins of the Bédoin forest, the white scree above Chalet Reynard, the Nesque gorges, Gordes perched on its rock, the villages of the Dentelles: the Vaucluse rebuilt from real geographic data, for your smart trainer.</p>
-    <a class="btn" href="en-contact.html?rubrique=avant_achat">Get notified at launch</a>
-    <a class="btn ghost" href="#parcours">Explore the map</a>
+    <div class="pcard" id="pionnier"><div class="jersey"><svg width="100%" role="img" aria-label="The Ventoux Pioneer jersey, front" viewBox="0 0 250 270"><defs><clipPath id="pc"><path d="M70 20 Q125 40 180 20 L240 60 L222 108 L196 98 L196 258 Q125 266 54 258 L54 98 L28 108 L10 60 Z"/></clipPath><pattern id="pp" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#efe6d2"/><path d="M0 8 L8 0" stroke="#e3d7bc" stroke-width="1"/></pattern></defs><g clip-path="url(#pc)"><rect width="250" height="270" fill="url(#pp)"/><rect x="0" y="118" width="250" height="44" fill="#1d1d1f"/><rect x="0" y="114" width="250" height="4" fill="#d9b25a"/><rect x="0" y="162" width="250" height="4" fill="#d9b25a"/><path d="M10 60 L28 108 L54 98 L54 84 L24 60Z" fill="#1d1d1f"/><path d="M240 60 L222 108 L196 98 L196 84 L226 60Z" fill="#1d1d1f"/><rect x="0" y="240" width="250" height="30" fill="#1d1d1f"/></g><path d="M70 20 Q125 40 180 20 L240 60 L222 108 L196 98 L196 258 Q125 266 54 258 L54 98 L28 108 L10 60 Z" fill="none" stroke="#1d1d1f" stroke-width="2"/><path d="M96 24 Q125 40 154 24 L150 34 Q125 46 100 34Z" fill="#1d1d1f"/><circle cx="160" cy="74" r="27" fill="#1d1d1f" stroke="#d9b25a" stroke-width="2.5"/><image href="img/pionnier_icone.png" x="139" y="59" width="42" height="30"/><text x="125" y="147" fill="#d9b25a" font-size="19" font-weight="900" text-anchor="middle" letter-spacing="4" font-family="Georgia,serif">PIONNIER</text></svg><div class="jcap">In the game</div></div><div><h3>Become a Ventoux <span class="gold">Pioneer</span></h3><p>On launch day, you receive the download link and a code that unlocks your rider’s numbered Pioneer jersey <b class="gold">in the game</b>. Only for people who sign up before launch.</p><form class="notify" id="pionnier-form" novalidate><input type="email" name="email" required autocomplete="email" placeholder="Your e-mail address" aria-label="Your e-mail address"><span class="trap" aria-hidden="true"><input name="site" tabindex="-1" autocomplete="off" aria-label="Do not fill in"></span><button type="submit" class="btn">Notify me</button></form><p class="notify-status" id="pionnier-status" role="status" aria-live="polite" hidden></p><p class="notify-note" id="pionnier-note">One confirmation e-mail, then a single one on launch day. Address deleted after sending. <a href="en-privacy.html#pioneers">Privacy</a></p></div></div>
+    <a class="after-card" href="#parcours">Explore the map ↓</a>
   </div>
 </div>
 
@@ -327,7 +327,7 @@
   <div class="wrap">
     <div class="kicker">Planned pricing</div>
     <h2>Start for free. Head for the summit whenever you like.</h2>
-    <p class="soon-note">The game is being finalised with a group of testers. The prices below are those planned at launch and may still change. <a href="en-contact.html?rubrique=avant_achat">Write to us</a> to be notified at launch.</p>
+    <p class="soon-note">The game is being finalised with a group of testers. The prices below are those planned at launch and may still change. <a href="#pionnier">Sign up</a> to be notified at launch and become a Ventoux Pioneer.</p>
       <div class="offer">
       <div class="card"><div class="body">
         <h3>Free</h3>
@@ -386,6 +386,7 @@
     <div class="grid two">
       <ul class="ticks">
         <li>A <strong>Bluetooth</strong> smart trainer (FTMS standard, used by most recent connected trainers): live gradient, ERG mode during workouts.</li>
+        <li>No <strong>ANT+</strong> (USB stick) for now: the connection is Bluetooth.</li>
         <li>A <strong>Bluetooth heart-rate</strong> strap or watch.</li>
         <li>No smart trainer yet? <strong>Keyboard mode</strong> lets you try the game straight away.</li>
         <li><strong>Guided calibration</strong> in the game for an accurate feel.</li>
@@ -404,7 +405,7 @@
   <div class="wrap">
     <div class="kicker">FAQ</div>
     <h2>Frequently asked questions</h2>
-    <details open><summary>When will the game be available?</summary><p>Mont Ventoux Online is in testing (beta) with a group of cyclists. Launch is planned soon: <a href="en-contact.html?rubrique=avant_achat">write to us</a> to be notified as soon as it can be downloaded.</p></details>
+    <details open><summary>When will the game be available?</summary><p>Mont Ventoux Online is in testing (beta) with a group of cyclists. Launch is planned soon: <a href="#pionnier">sign up</a> to receive the download link by e-mail on launch day, with the Pioneer jersey in the game.</p></details>
     <details><summary>How can I contact you?</summary><p>Through the <a href="en-contact.html">contact form</a>: pick the topic of your message (before buying, technical issue, subscription, idea) and it goes straight to the right person.</p></details>
     <details><summary>What does the free version include?</summary><p>Four complete routes to ride with your smart trainer and heart-rate monitor, with no time limit or ride limit, the first five progression levels, badges and the monthly challenge.</p></details>
     <details><summary>How does the subscription work?</summary><p>€5.99 per month, no commitment: cancel whenever you like, access stays open until the end of the paid month. Your progress is kept. In the free version your experience keeps counting beyond level 5: when you subscribe, you instantly get the level you have really earned.</p></details>
@@ -534,6 +535,6 @@
 })();
 </script>
 <script src="data/defis.js?v=1"></script>
-<script src="js/site.js?v=2"></script>
+<script src="js/site.js?v=3"></script>
 </body>
 </html>

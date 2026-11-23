@@ -142,6 +142,52 @@
   }
 
   // ------------------------------------------------------------------
+  // Pionniers du Ventoux : inscription d'avant la sortie (accueil), page « Vous êtes Pionnier n° X »
+  // ------------------------------------------------------------------
+  var SERVEUR_MVO = /^(127\.0\.0\.1|localhost)$/.test(location.hostname) ? "http://127.0.0.1:8798" : "https://mvo-abonnement.montventouxonline.workers.dev";
+  var pform = document.getElementById("pionnier-form");
+  if (pform) {
+    var pstat = document.getElementById("pionnier-status"), pnote = document.getElementById("pionnier-note");
+    var pm = lang === "en"
+      ? { ok: "<b>Almost done!</b> Click the link we have just sent you to confirm your signup and get your Pioneer number. Nothing there? Check your spam folder.",
+          email: "Please check your e-mail address.", trop: "Too many signups from this connection: please try again in an hour.",
+          ferme: "The game is out: signups are closed. Download it from this page.", err: "Signup failed: please try again in a moment.", envoi: "Sending…" }
+      : { ok: "<b>Presque fini !</b> Cliquez sur le lien que nous venons de vous envoyer pour confirmer votre inscription et obtenir votre numéro de Pionnier. Rien reçu ? Regardez dans les indésirables.",
+          email: "Vérifiez votre adresse e-mail.", trop: "Trop d'inscriptions depuis cette connexion : réessayez dans une heure.",
+          ferme: "Le jeu est sorti : les inscriptions sont closes. Téléchargez-le depuis cette page.", err: "L'inscription n'a pas abouti : réessayez dans un instant.", envoi: "Envoi…" };
+    var pmsg = function (cls, html) { pstat.hidden = false; pstat.className = "notify-status " + cls; pstat.innerHTML = html; };
+    pform.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = pform.elements.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { pmsg("err", pm.email); pform.elements.email.focus(); return; }
+      var b = pform.querySelector("button[type=submit]");
+      b.disabled = true; pmsg("", pm.envoi);
+      fetch(SERVEUR_MVO + "/v1/pionnier", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, langue: lang, site: pform.elements.site.value }) })
+        .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+        .then(function (r) {
+          b.disabled = false;
+          if (r.ok) {
+            pform.hidden = true; pnote.hidden = true; pform.closest(".pcard").classList.add("done");
+            pmsg("ok", pm.ok); mesure("pionnier"); return;
+          }
+          pmsg("err", pm[r.erreur] || pm.err);
+        })
+        .catch(function () { b.disabled = false; pmsg("err", pm.err); });
+    });
+  }
+  var presult = document.getElementById("pionnier-resultat");
+  if (presult) {
+    var qs = new URLSearchParams(location.search), n = parseInt(qs.get("n"), 10), etat = qs.get("etat");
+    var bloc = document.getElementById(n > 0 && n < 1000000 ? "p-bienvenue" : etat === "retire" ? "p-retire" : "p-inconnu");
+    if (bloc) bloc.hidden = false;
+    if (n > 0) {
+      var txt = (lang === "en" ? "No. " : "N° ") + n;
+      document.querySelectorAll(".p-num").forEach(function (el) { el.textContent = txt; });
+    }
+  }
+
+  // ------------------------------------------------------------------
   // Pages des versants : profil coloré par kilomètre, repères, chiffres
   // ------------------------------------------------------------------
   var vbox = document.getElementById("versant");

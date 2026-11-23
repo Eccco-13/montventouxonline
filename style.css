@@ -352,8 +352,59 @@ kbd { display: inline-block; min-width: 1.6em; padding: 1px 7px; border-radius: 
 .steps strong { color: #fff; display: block; margin-bottom: 4px; }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
 
+/* Page Installation : téléchargement, étapes, illustration simplifiée de l'avertissement de Windows */
+.install-page .dl-box { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 20px 0 30px; }
+.install-page .dl-meta { color: var(--muted); font-size: 14px; }
+.install-page h3 { font-size: 22px; margin: 34px 0 12px; }
+.steps.install { grid-template-columns: repeat(2, 1fr); }
+.smartscreen { margin: 26px 0 0; max-width: 560px; }
+.ss-box { background: #1f4e8c; color: #fff; border-radius: 6px; padding: 22px 24px; font-family: "Segoe UI", system-ui, sans-serif; }
+.ss-title { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+.ss-box p { color: #e7eefa; margin: 0 0 12px; font-size: 14px; }
+.ss-link { text-decoration: underline; font-weight: 600; outline: 3px solid #ffd75e; outline-offset: 3px; border-radius: 2px; }
+.ss-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.ss-btn { border: 1px solid #c9d6ea; padding: 6px 16px; font-size: 14px; }
+.ss-btn.run { outline: 3px solid #ffd75e; outline-offset: 3px; }
+.ss-num { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 10px; border-radius: 50%; background: #ffd75e; color: #10131a; font-weight: 800; font-size: 13px; text-decoration: none; }
+.smartscreen figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
+.hash { background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font-size: 13px; }
+@media (max-width: 860px) { .steps.install { grid-template-columns: 1fr; } }
 /* Vidéo de démonstration (accueil) */
 .demo-video video { display: block; width: 100%; max-width: 960px; margin: 24px auto 0; aspect-ratio: 16 / 9; border-radius: 12px; background: #000; box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
 .demo-video h2, .demo-video .kicker { text-align: center; }
 #telecommande .lead { text-align: center; max-width: 760px; margin-left: auto; margin-right: auto; }
 #telecommande .ticks { max-width: 960px; margin: 24px auto 0; }
+
+/* Pionniers du Ventoux : inscription d'avant la sortie (23/11/2026) */
+.gold { color: #e2bd6a; }
+.pcard { display: flex; gap: 18px; align-items: center; max-width: 660px; background: rgba(13,13,15,.74); border: 1px solid rgba(226,189,106,.45);
+  border-radius: 16px; padding: 16px 20px; backdrop-filter: blur(6px); margin: 0 0 16px; position: relative; }
+.pcard .jersey { flex: 0 0 112px; }
+.pcard .jcap { text-align: center; color: #9ea3ab; font-size: 11.5px; margin-top: 4px; letter-spacing: .04em; }
+.pcard h3 { margin: 0 0 4px; font-size: 19px; }
+.hero .pcard p { margin: 0 0 12px; font-size: 14.5px; color: #d6d9de; max-width: none; }
+.notify { display: flex; gap: 10px; max-width: 520px; margin: 0; }
+.notify input[type=email] { flex: 1; min-width: 0; padding: 11px 18px; border-radius: 999px; border: 2px solid rgba(255,255,255,.55);
+  background: rgba(13,13,15,.55); color: #fff; font-size: 16px; font-family: inherit; }
+.notify input::placeholder { color: #c3c7ce; }
+.notify .btn { margin: 0; padding: 11px 18px; border: 2px solid var(--red); cursor: pointer; font-size: 16px; font-family: inherit; white-space: nowrap; }
+.notify .btn[disabled] { opacity: .6; cursor: wait; }
+.hero .pcard p.notify-note { margin: 8px 0 0; font-size: 12.5px; color: #9ea3ab; }
+.notify-note a { color: #c9ccd2; }
+.hero .pcard p.notify-status { margin: 8px 0 0; font-size: 14.5px; }
+.hero .pcard p.notify-status.err { color: #ff9b8f; }
+.hero .pcard p.notify-status.ok { color: #e6e8eb; }
+.pcard .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.pcard.done { border-color: #3c8a4e; }
+.pcard [hidden] { display: none !important; }
+.hero .after-card { color: #fff; font-weight: 600; font-size: 15px; }
+.pionnier-page { text-align: center; }
+.pionnier-page .maillots { display: flex; gap: 10px; justify-content: center; margin: 26px auto 6px; max-width: 480px; }
+.pionnier-page .maillots figure { margin: 0; flex: 1; }
+.pionnier-page .maillots figcaption { color: var(--muted); font-size: 13px; }
+.pionnier-page p { max-width: 56ch; margin-left: auto; margin-right: auto; }
+@media (max-width: 720px) {
+  .notify { flex-direction: column; }
+  .pcard { flex-direction: column; align-items: stretch; }
+  .pcard .jersey { flex: none; width: 96px; margin: 0 auto; }
+}

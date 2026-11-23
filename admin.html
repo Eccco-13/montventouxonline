@@ -270,6 +270,7 @@
           <a href="https://www.ovh.com/manager/" target="_blank" rel="noopener">OVHcloud<span>Nom de domaine, DNS, factures OVH</span></a>
           <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console<span>Référencement, recherches, pages indexées</span></a>
           <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener">Cloudflare<span>Serveur d'abonnement et de contact</span></a>
+          <a href="https://app.brevo.com/" target="_blank" rel="noopener">Brevo<span>E-mails des Pionniers (confirmation, sortie)</span></a>
           <a href="https://github.com/Eccco-13" target="_blank" rel="noopener">GitHub<span>Code du jeu, site, installeurs</span></a>
           <a href="https://www.cm2c.net/" target="_blank" rel="noopener">CM2C<span>Médiateur de la consommation (espace adhérent)</span></a>
           <a href="https://www.strava.com/clubs/1096717" target="_blank" rel="noopener">Club Strava<span>Mont Ventoux Online</span></a>
@@ -310,6 +311,21 @@
   var pl = function (n, mot, pluriel) { return n + " " + (n > 1 ? (pluriel || mot.replace(/(\S+)/g, "$1s")) : mot); };
   var kpi = function (label, value, alert) { return '<div' + (alert ? ' class="alert"' : "") + '><strong>' + value + "</strong><span>" + label + "</span></div>"; };
 
+  // ---------- Pionniers du Ventoux (inscriptions d'avant la sortie) ----------
+  // Clé Brevo : alerte si aucun appel réussi depuis plus de 8 jours (le serveur l'utilise au moins une fois par semaine).
+  function pionnierKpis() {
+    var pi = data.pionniers;
+    if (!pi) return [];
+    var brevoOk = pi.brevo && pi.brevo_dernier_appel && (Date.now() - Date.parse(pi.brevo_dernier_appel)) < 8 * 86400000;
+    var attente = (pi.confirmations_en_attente || 0) + (pi.sortie_le ? (pi.annonces_en_attente || 0) : 0);
+    return [
+      kpi("Pionniers inscrits (confirmés)", pi.confirmes),
+      kpi("Nouveaux Pionniers (7 jours)", pi.confirmes_7),
+      kpi("Inscriptions pas encore confirmées", pi.non_confirmes),
+      kpi(brevoOk ? "E-mails envoyés aujourd'hui (Brevo)" : "Brevo : clé à vérifier", brevoOk ? pi.envois_aujourd_hui + " / " + pi.par_jour + (attente ? " · " + attente + " en file" : "") : "!", !brevoOk),
+    ];
+  }
+
   // ---------- Vue d'ensemble ----------
   function renderOverview() {
     var j = data.joueurs, a = data.abonnements, p = data.paiements, m = data.messages;
@@ -319,7 +335,7 @@
       kpi("Joueurs aujourd'hui", j.aujourdhui), kpi("Joueurs sur 7 jours", j.j7), kpi("Joueurs sur 30 jours", j.j30), kpi("Nouveaux PC (7 jours)", j.nouveaux_7),
       kpi("Abonnés actifs", a.actifs), kpi("Encaissé ce mois-ci" + (p.disponible && p.mode === "test" ? " (test)" : ""), p.disponible ? eur(p.mois.total) : "—"),
       kpi("Messages non lus", m.non_lus, m.non_lus > 0), kpi(late ? "Échéances en retard" : "Échéances à venir", late || due.length, late > 0),
-    ].join("");
+    ].concat(pionnierKpis()).join("");
     var days = [], byDay = {};
     j.par_jour.forEach(function (d) { byDay[d.jour] = d; });
     for (var i = 29; i >= 0; i--) days.push(new Date(Date.now() - i * 86400000).toISOString().slice(0, 10));
