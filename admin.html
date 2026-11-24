@@ -191,7 +191,7 @@
         <div class="row" style="justify-content: space-between">
           <select id="folder" title="Dossier de la messagerie"><option value="INBOX">Boîte de réception</option></select>
           <span><button id="boxRefresh" class="ghost small">Relever la boîte</button>
-            <button id="mailTest" class="ghost small" title="Envoie à contact@ l'exemple du courriel reçu par un nouvel abonné">Courriel de confirmation d'essai</button>
+            <button id="boxSent" class="ghost small" title="Les courriels envoyés depuis contact@">Boîte d'envoi</button>
             <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
         </div>
         <p id="boxState" class="muted"></p>
@@ -422,6 +422,7 @@
         return '<option value="' + esc(f.nom) + '">' + esc(ROLE[f.role] || f.affiche) + " — " + f.total + (f.non_lus ? " (" + f.non_lus + " non lus)" : "") + "</option>";
       }).join("");
       $("folder").value = folders.some(function (f) { return f.nom === cur; }) ? cur : "INBOX";
+      syncSentBtn();
       var inbox = folders.filter(function (f) { return f.role === "inbox"; })[0];
       var b = $("badgeBox"); b.hidden = !(inbox && inbox.non_lus); b.textContent = inbox ? inbox.non_lus : "";
     }).catch(function () {});
@@ -752,13 +753,23 @@
       .then(function () { $("sendBtn").disabled = false; });
   });
   $("compose").elements.texte.value = SIGNATURE;
-  $("mailTest").addEventListener("click", function () {
-    $("boxState").textContent = "Envoi du courriel d'essai à contact@…"; $("boxState").className = "muted";
-    post("/v1/admin/confirmation-essai", {}).then(function (r) {
-      $("boxState").textContent = r.envoye ? "Courriel d'essai envoyé à contact@ : relève la boîte dans quelques secondes." : (r.raison || "Envoi impossible");
-      $("boxState").className = r.envoye ? "ok" : "err";
-    }).catch(function (e) { $("boxState").textContent = e.message; $("boxState").className = "err"; });
+  // Boîte d'envoi : bascule entre le dossier Envoyés et la boîte de réception (même liste que le menu des dossiers).
+  function syncSentBtn() {
+    var inSent = folderOf($("folder").value || "INBOX").role === "sent";
+    $("boxSent").textContent = inSent ? "Boîte de réception" : "Boîte d'envoi";
+  }
+  $("boxSent").addEventListener("click", function () {
+    var go = function () {
+      var inSent = folderOf($("folder").value || "INBOX").role === "sent";
+      var sent = folders.filter(function (f) { return f.role === "sent"; })[0];
+      if (!inSent && !sent) { $("boxState").textContent = "Dossier des envois introuvable dans la messagerie."; $("boxState").className = "err"; return; }
+      $("folder").value = inSent ? "INBOX" : sent.nom;
+      syncSentBtn();
+      loadBox();
+    };
+    folders.length ? go() : loadFolders().then(go);
   });
+  $("folder").addEventListener("change", syncSentBtn);
   $("box").addEventListener("click", function (e) {
     var del = e.target.closest("button[data-trash]");
     if (del) {
