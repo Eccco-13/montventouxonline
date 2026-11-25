@@ -207,6 +207,7 @@
           <form id="compose" class="compose">
             <label>À <input name="a" type="text" placeholder="adresse@exemple.fr (plusieurs : séparées par des virgules)" autocomplete="off"></label>
             <label>Copie <input name="cc" type="text" placeholder="facultatif" autocomplete="off"></label>
+            <label>Copie cachée (CCI) <input name="cci" type="text" placeholder="facultatif : reçoivent le mail sans voir les autres destinataires" autocomplete="off"></label>
             <label>Objet <input name="objet" type="text" maxlength="200"></label>
             <label>Message <textarea name="texte" rows="14"></textarea></label>
             <label>Pièces jointes <input name="pieces" type="file" multiple></label>
@@ -739,15 +740,16 @@
     var f = e.target, files = Array.prototype.slice.call(f.elements.pieces.files || []);
     if (files.length > 5) { $("sendState").textContent = "5 pièces jointes au plus."; $("sendState").className = "err"; return; }
     if (files.reduce(function (t, x) { return t + x.size; }, 0) > 8 * 1024 * 1024) { $("sendState").textContent = "Pièces jointes trop lourdes (8 Mo au plus)."; $("sendState").className = "err"; return; }
-    if (!confirm("Envoyer ce courriel à " + f.elements.a.value + " ?")) return;
+    var nCci = f.elements.cci.value.split(/[,;\s]+/).filter(Boolean).length;
+    if (!confirm("Envoyer ce courriel à " + f.elements.a.value + (nCci ? " (et " + nCci + " en copie cachée)" : "") + " ?")) return;
     $("sendBtn").disabled = true; $("sendState").textContent = "Envoi…"; $("sendState").className = "";
     Promise.all(files.map(lireFichier)).then(function (pieces) {
-      return post("/v1/admin/envoyer", { a: f.elements.a.value, cc: f.elements.cc.value, objet: f.elements.objet.value, texte: f.elements.texte.value,
+      return post("/v1/admin/envoyer", { a: f.elements.a.value, cc: f.elements.cc.value, cci: f.elements.cci.value, objet: f.elements.objet.value, texte: f.elements.texte.value,
         en_reponse_a: f.elements.en_reponse_a.value, pieces: pieces });
     }).then(function (r) {
       if (!r.ok) throw new Error(r.erreur || "Envoi impossible");
       $("sendState").textContent = "Envoyé" + (r.range ? " (copie dans Envoyés)" : "") + "."; $("sendState").className = "ok";
-      ["a", "cc", "objet", "en_reponse_a"].forEach(function (k) { f.elements[k].value = ""; });
+      ["a", "cc", "cci", "objet", "en_reponse_a"].forEach(function (k) { f.elements[k].value = ""; });
       f.elements.texte.value = SIGNATURE; f.elements.pieces.value = "";
     }).catch(function (err) { $("sendState").textContent = err.message; $("sendState").className = "err"; })
       .then(function () { $("sendBtn").disabled = false; });
