@@ -192,6 +192,7 @@
           <select id="folder" title="Dossier de la messagerie"><option value="INBOX">Boîte de réception</option></select>
           <span><button id="boxRefresh" class="ghost small">Relever la boîte</button>
             <button id="boxSent" class="ghost small" title="Les courriels envoyés depuis contact@">Boîte d'envoi</button>
+            <button id="boxEmpty" class="ghost small" title="Efface définitivement tous les courriels de la corbeille" hidden>Vider la corbeille</button>
             <a class="tag" href="https://webmail.mail.ovh.net/" target="_blank" rel="noopener">Ouvrir le webmail OVHcloud</a></span>
         </div>
         <p id="boxState" class="muted"></p>
@@ -759,7 +760,20 @@
   function syncSentBtn() {
     var inSent = folderOf($("folder").value || "INBOX").role === "sent";
     $("boxSent").textContent = inSent ? "Boîte de réception" : "Boîte d'envoi";
+    // « Vider la corbeille » : seulement quand la corbeille est ouverte.
+    $("boxEmpty").hidden = folderOf($("folder").value || "INBOX").role !== "trash";
   }
+  $("boxEmpty").addEventListener("click", function () {
+    if (!confirm("Vider la corbeille ? Tous les courriels de la corbeille seront effacés définitivement de la boîte contact@ (impossible de les récupérer).")) return;
+    $("boxEmpty").disabled = true; $("boxState").textContent = "Vidage de la corbeille…"; $("boxState").className = "";
+    post("/v1/admin/courriels/vider-corbeille", {}).then(function (r) {
+      if (!r.ok) throw new Error(r.erreur || "Corbeille non vidée");
+      $("boxState").textContent = r.supprimes ? r.supprimes + " courriel(s) effacé(s) définitivement." : "La corbeille était déjà vide.";
+      $("boxState").className = "ok";
+      loadFolders().then(loadBox);
+    }).catch(function (err) { $("boxState").textContent = err.message; $("boxState").className = "err"; })
+      .then(function () { $("boxEmpty").disabled = false; });
+  });
   $("boxSent").addEventListener("click", function () {
     var go = function () {
       var inSent = folderOf($("folder").value || "INBOX").role === "sent";
