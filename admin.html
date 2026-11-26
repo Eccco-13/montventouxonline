@@ -506,7 +506,8 @@
     var a = call("/v1/admin/ovh?quoi=services").then(ko).then(function (r) {
       $("ovhServices").innerHTML = r.services.length ? '<table class="list"><tr><th>Service</th><th>Prochaine échéance</th><th>Renouvellement</th><th class="num">Prix</th></tr>' +
         r.services.map(function (x) {
-          var d = x.prochaine ? daysTo(String(x.prochaine).slice(0, 10)) : null;
+          // Pas d'alerte pour un service sans renouvellement ni prix (domaine de messagerie : rien à payer).
+          var d = x.prochaine && x.mode ? daysTo(String(x.prochaine).slice(0, 10)) : null;
           return "<tr><td><strong>" + esc(x.nom) + '</strong><br><span class="muted" style="font-size:13px">' + esc([x.type, x.etat].filter(Boolean).join(" · ")) + "</span></td><td>" +
             (x.prochaine ? esc(dateFr(String(x.prochaine).slice(0, 10))) + (d != null && d <= 30 ? ' <span class="tag red">' + (d < 0 ? "dépassée" : "dans " + d + " j") + "</span>" : "") : "—") +
             "</td><td>" + esc(MODE[x.mode] || x.mode || "—") + (x.periode ? " · " + esc(periode(x.periode)) : "") + '</td><td class="num">' + esc(prixTexte(x.prix)) + "</td></tr>";
